@@ -25,6 +25,16 @@ if (!skinCss) {
   );
 }
 
+/* Display face + body face per skin. Keep in step with FACE_SETS in
+ * scripts/fetch-fonts.mjs — a wrong filename here is a silent slow paint,
+ * not an error. */
+const PRELOAD: Record<string, string[]> = {
+  salon: ['fraunces-500.woff2', 'dmsans-var.woff2'],
+  'salon-organic': ['caprasimo-400.woff2', 'figtree-var.woff2'],
+  'salon-noir': ['fraunces-500.woff2', 'dmsans-var.woff2'],
+};
+const preloadFonts = PRELOAD[business.skin] ?? [];
+
 /*
  * Schema.org LocalBusiness.
  *
@@ -76,12 +86,19 @@ const jsonLd = {
 
     {/*
       Preload only the two faces the hero needs before first paint: the display
-      face draws the wordmark, the body face everything under it. The 600 weight
-      and the Nastaliq face appear further down the page and can arrive late —
-      preloading all four would have them compete with the ones that matter.
+      face draws the wordmark, the body face everything under it. The Nastaliq
+      face appears further down and can arrive late — preloading everything
+      would have the extras compete with the ones that matter.
+
+      fonts.css declares every skin's faces (a browser only downloads what a
+      rule references), so the preload list is the one place that has to know
+      which skin is actually building.
     */}
-    <link rel="preload" href="/fonts/fraunces-500.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/dmsans-var.woff2" as="font" type="font/woff2" crossorigin />
+    {
+      preloadFonts.map((f) => (
+        <link rel="preload" href={`/fonts/${f}`} as="font" type="font/woff2" crossorigin />
+      ))
+    }
 
     {/*
       Skin is chosen by the client file. Inlined rather than linked: at these

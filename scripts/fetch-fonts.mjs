@@ -41,10 +41,12 @@ const UI_URDU = ['اپوائنٹمنٹ', 'پتہ'];
  * a 400 KB page budget three unused faces is a tenth of the whole page spent
  * on nothing. Grep the skins before adding one.
  */
-const LATIN = [
-  {
-    id: 'fraunces',
-    family: 'Fraunces',
+const FACE_SETS = {
+  /* Warm-atelier skin: Fraunces + DM Sans. */
+  salon: [
+    {
+      id: 'fraunces',
+      family: 'Fraunces',
     /*
      * Display face: wordmark, headings, prices.
      *
@@ -55,26 +57,50 @@ const LATIN = [
      * than the variable font: the full variable file carries SOFT and WONK
      * axes we barely touch, at several times the size.
      */
-    query: 'Fraunces:opsz,wght@9..144,500',
-    weights: ['500'],
-  },
-  {
-    id: 'dmsans',
-    family: 'DM Sans',
-    /*
-     * Body at 400, labels at 500, buttons at 600. Replaces Jost, which is
-     * geometric Futura-adjacent and runs cold — wrong temperature for a
-     * beauty brand.
-     *
-     * Variable, not three statics. Each static DM Sans weight is ~36 KB, so
-     * 400/500/600 as separate files costs 108 KB; the variable file covering
-     * the whole range is a fraction of that and lets the skin use any weight
-     * in between without another download.
-     */
-    query: 'DM+Sans:wght@400..600',
-    variable: '400 600',
-  },
-];
+      query: 'Fraunces:opsz,wght@9..144,500',
+      weights: ['500'],
+    },
+    {
+      id: 'dmsans',
+      family: 'DM Sans',
+      /*
+       * Body at 400, labels at 500, buttons at 600. Replaces Jost, which is
+       * geometric Futura-adjacent and runs cold — wrong temperature for a
+       * beauty brand.
+       *
+       * Variable, not three statics. Each static DM Sans weight is ~36 KB, so
+       * 400/500/600 as separate files costs 108 KB; the variable file covering
+       * the whole range is a fraction of that and lets the skin use any weight
+       * in between without another download.
+       */
+      query: 'DM+Sans:wght@400..600',
+      variable: '400 600',
+    },
+  ],
+
+  /*
+   * Organic skin: the pairing specified by the imported Claude Design system
+   * (_ds/organic-…/styles.css). Caprasimo is a heavy display face used at 400
+   * only — it has no other weight — and Figtree covers body through button
+   * weights as one variable file.
+   */
+  'salon-organic': [
+    { id: 'caprasimo', family: 'Caprasimo', query: 'Caprasimo:wght@400', weights: ['400'] },
+    { id: 'figtree', family: 'Figtree', query: 'Figtree:wght@400..700', variable: '400 700' },
+  ],
+};
+
+/*
+ * Every skin's faces, always.
+ *
+ * fonts.css is a single file shared by all builds, so emitting only the
+ * current skin's faces silently broke the others — the first run of this
+ * script for the organic skin wiped Fraunces and DM Sans out from under the
+ * warm-atelier skin. Declaring the union is free at runtime: a browser only
+ * downloads a face when a rule actually references it, and the preload hints
+ * (which are the part that costs a request) are chosen per skin in Site.astro.
+ */
+const LATIN = Object.values(FACE_SETS).flat();
 
 const isArabicScript = (s) => /[؀-ۿݐ-ݿﭐ-﷿ﹰ-﻿]/.test(s);
 

@@ -60,17 +60,18 @@ if (files.length === 0) {
  * before the first dot identifies the original photo.
  */
 const imageGroups = new Map(); // source name -> ext -> largest bytes
+const fontFiles = new Map(); // filename -> bytes on disk
 let textBytes = 0;
-let fontBytes = 0;
 let htmlGz = 0;
 const textDetail = new Map();
+let htmlSource = '';
 
 for (const f of files) {
   const ext = extname(f).toLowerCase();
   const { size } = await stat(f);
 
   if (ext === '.woff2' || ext === '.woff' || ext === '.ttf') {
-    fontBytes += size;
+    fontFiles.set(basename(f), size);
     continue;
   }
 
@@ -84,15 +85,61 @@ for (const f of files) {
   }
 
   if (TEXT_EXT.has(ext)) {
-    const gz = gzipSync(await readFile(f)).length;
+    const raw = await readFile(f);
+    const gz = gzipSync(raw).length;
     textBytes += gz;
     textDetail.set(ext, (textDetail.get(ext) ?? 0) + gz);
-    if (ext === '.html') htmlGz += gz;
+    if (ext === '.html') {
+      htmlGz += gz;
+      htmlSource += raw.toString('utf8');
+    }
     continue;
   }
 
   textBytes += size;
 }
+
+/*
+ * Fonts a visitor actually downloads.
+ *
+ * fonts.css declares every skin's faces so that switching skins cannot wipe
+ * another one's @font-face rules, and public/ copies all of them into dist.
+ * A browser only fetches a face when a rule references its family, so summing
+ * the directory overstates the page by whatever the unused skins weigh —
+ * the same disk-versus-transfer mistake the image counting used to make.
+ *
+ * So: read the family of each @font-face and its file, then keep only the
+ * families this build's CSS actually names.
+ */
+/* Quotes and whitespace are optional: fonts.css is bundled and minified
+ * (`font-family:Fraunces`) while the skin is inlined raw (`"Caprasimo"`). */
+const faces = [
+  ...htmlSource.matchAll(
+    /@font-face\s*\{[^}]*?font-family:\s*"?([^";}]+?)"?\s*;[^}]*?url\(\s*"?\/fonts\/([^")\s]+?)"?\s*\)[^}]*\}/g
+  ),
+].map((m) => ({ family: m[1].trim(), file: m[2] }));
+
+/* Strip @font-face blocks — else every declared family trivially matches its
+ * own declaration — and CSS comments, else a face merely discussed in a
+ * rationale comment counts as used. */
+const usage = htmlSource
+  .replace(/@font-face\s*\{[^}]*\}/g, '')
+  .replace(/\/\*[\s\S]*?\*\//g, '');
+
+let fontBytes = 0;
+const fontRows = [];
+const counted = new Set();
+for (const { family, file } of faces) {
+  if (counted.has(file)) continue;
+  if (!usage.includes(family)) continue;
+  const size = fontFiles.get(file);
+  if (size === undefined) continue;
+  counted.add(file);
+  fontBytes += size;
+  fontRows.push([file, size]);
+}
+
+const unusedFonts = [...fontFiles.keys()].filter((f) => !counted.has(f));
 
 /* Best format per image = the one a modern browser would take. */
 let imageBytes = 0;
@@ -113,7 +160,15 @@ console.log('  ─────────────────────�
 for (const [ext, size] of [...textDetail.entries()].sort((a, b) => b[1] - a[1])) {
   console.log(`  ${(ext + ' (gz)').padEnd(14)} ${String(kb(size)).padStart(8)} KB`);
 }
-console.log(`  ${'fonts'.padEnd(14)} ${String(kb(fontBytes)).padStart(8)} KB`);
+console.log(
+  `  ${'fonts'.padEnd(14)} ${String(kb(fontBytes)).padStart(8)} KB   (${fontRows.length} referenced)`
+);
+for (const [file, size] of fontRows.sort((a, b) => b[1] - a[1])) {
+  console.log(`    ${file.padEnd(28)} ${String(kb(size)).padStart(6)} KB`);
+}
+if (unusedFonts.length) {
+  console.log(`    ${`(${unusedFonts.length} other skins' faces on disk, not fetched)`.padEnd(28)}`);
+}
 console.log(
   `  ${'images'.padEnd(14)} ${String(kb(imageBytes)).padStart(8)} KB   (${imageRows.length} photos, best format @2x)`
 );

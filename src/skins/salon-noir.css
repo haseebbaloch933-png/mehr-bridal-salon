@@ -40,9 +40,21 @@
   --on-wa: #04240f;
 
   /* type */
-  --font-display: "Cormorant Garamond", "Hoefler Text", Baskerville,
-    "Palatino Linotype", Palatino, Georgia, serif;
-  --font-body: "Jost", -apple-system, "Segoe UI", Roboto, system-ui, sans-serif;
+  /*
+   * Fraunces + DM Sans, not Cormorant + Jost.
+   *
+   * This skin kept the original pairing after the light skin was split off,
+   * but neither Cormorant Garamond nor Jost is in the font pipeline — both
+   * had been silently falling back to Hoefler Text and system sans since the
+   * split. Caught by the weight checker reporting one referenced face where
+   * there should be three.
+   *
+   * Pointing it at the faces already shipped is the right fix rather than
+   * downloading two more: the reason Cormorant was dropped in the first place
+   * (it is *the* wedding font, and reads as a template) applies here too.
+   */
+  --font-display: "Fraunces", "Hoefler Text", Baskerville, Georgia, serif;
+  --font-body: "DM Sans", -apple-system, "Segoe UI", Roboto, system-ui, sans-serif;
   --font-ui: ui-monospace, "Cascadia Mono", Consolas, monospace;
   --font-urdu: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", serif;
 

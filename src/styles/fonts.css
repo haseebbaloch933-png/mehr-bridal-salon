@@ -27,6 +27,22 @@
 }
 
 @font-face {
+  font-family: "Caprasimo";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/caprasimo-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Figtree";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/fonts/figtree-var.woff2") format("woff2");
+}
+
+@font-face {
   font-family: "Noto Nastaliq Urdu";
   font-style: normal;
   font-weight: 400;

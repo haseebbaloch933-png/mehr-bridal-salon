@@ -1,0 +1,789 @@
+/*
+ * SALON-ORGANIC SKIN
+ *
+ * The "Organic" design system from the imported Claude Design project
+ * (_ds/organic-5dc48492-…/styles.css), applied to the engine's existing
+ * section structure. Nothing about the page architecture changes — same hero,
+ * packages, price menu, gallery, reviews, booking form, WhatsApp checkout.
+ * Only the surface is restated in Organic's terms.
+ *
+ * Tokens below are that file's values verbatim. The one deliberate departure
+ * is documented at --accent: the system's brand terracotta does not clear
+ * 4.5:1 on its own cream ground, so text and fill are split.
+ *
+ * Where the imported app made a component decision our page also has to make
+ * — pill controls, cream cards on a warmer ground, the accent circle holding
+ * an initial, the washed hero treatment — that decision is carried across
+ * rather than reinvented.
+ */
+
+:root {
+  /* — Organic ground — */
+  --bg: #f5ead8;
+  --surface: #ebddc5;
+  --surface-2: #f9f4ed;
+  --card: #ebddc5;
+  --bar-bg: rgba(245, 234, 216, 0.94);
+
+  /* — ink — */
+  --fg: #201e1d;
+  --fg-dim: #645c50;
+  --fg-faint: #a19786;
+
+  /*
+   * The system's brand terracotta is #c67139. Measured against its own cream
+   * ground it lands near 3.4:1 — fine for a button fill carrying 14px heading
+   * type, not fine for 11px uppercase labels or a price. So the role is split:
+   * --accent is the ink value (the ramp's 700 step, which the system itself
+   * uses for tag text), --accent-fill keeps the true brand colour for solid
+   * surfaces where the text sits on top of it rather than beside it.
+   */
+  --accent: #8c491a;
+  --accent-lt: #f6a06b;
+  --accent-dk: #643312;
+
+  /*
+   * The system specifies `.btn-primary { background: var(--color-accent);
+   * color: var(--color-bg) }` — cream on #c67139. Measured, that is 3.03:1,
+   * so its own primary button fails small-text contrast. Same defect reaches
+   * the ribbon and the initial disc.
+   *
+   * Rather than invert the text to dark (which would preserve the hex but
+   * change the design's intent of light-on-warm), the fill drops to the
+   * lightest terracotta that carries cream text: #a05620 measures 4.59:1.
+   * That is two ramp steps from brand and still unmistakably the same colour.
+   *
+   * --accent-brand keeps the exact specified value for every use where no
+   * text sits on top — the arch tint, bullet dots, the divider mark — so the
+   * brand colour itself is not lost, only moved off text-bearing surfaces.
+   */
+  --accent-fill: #a05620;
+  --accent-brand: #c67139;
+  --accent-soft: #fff2eb;
+  --on-accent: #f5ead8;
+
+  /* Olive secondary — Organic's accent-2, used for confirmation and status. */
+  --accent-2: #56633f;
+  --accent-2-soft: #f0fae1;
+
+  --bronze: #8c491a;
+
+  --hairline: color-mix(in srgb, #201e1d 16%, transparent);
+  --rule: color-mix(in srgb, #201e1d 9%, transparent);
+
+  /* whatsapp — reserved, appears nowhere else */
+  --wa: #25d366;
+  --on-wa: #04240f;
+
+  /* — type: the system's pairing —
+   * Caprasimo is a single-weight display face; it has no 500 or 600, so the
+   * display weight token is 400 and any heavier heading must come from size,
+   * not weight. Figtree covers body through button as one variable file. */
+  --font-display: "Caprasimo", Georgia, serif;
+  --font-body: "Figtree", -apple-system, "Segoe UI", Roboto, system-ui, sans-serif;
+  --font-ui: "Figtree", -apple-system, "Segoe UI", system-ui, sans-serif;
+  --font-urdu: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", serif;
+
+  --fw-display: 400;
+  --ls-display: -0.015em;
+  --fs-body: 15px;
+  --fs-h2: 32px;
+
+  /* — metrics: Organic's spacing and radius scale — */
+  --col: 470px;
+  --gutter: 20px;
+  --gap-section: 44px;
+  /* The system's "rounded frame" override: cards go to radius-lg × 1.15. */
+  --radius: 32px;
+  --radius-pill: 999px;
+
+  --shadow-soft: 0 1px 2px color-mix(in srgb, #2e2b25 14%, transparent);
+  --shadow-lift: 0 3px 10px color-mix(in srgb, #2e2b25 16%, transparent);
+  --shadow-accent: 0 3px 10px color-mix(in srgb, #2e2b25 16%, transparent);
+  --shadow-wa: 0 3px 12px color-mix(in srgb, #0b7a37 30%, transparent);
+
+  --t: 200ms;
+  --ease: cubic-bezier(0.2, 0.6, 0.3, 1);
+}
+
+/* Caprasimo is heavy and tightly spaced; it needs a shorter line than a
+ * text serif and no extra tracking. */
+.h2,
+.hero__name,
+.card h3,
+.card__amt,
+.menu__price,
+.review__quote {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.12;
+}
+
+/* ---- section flow ------------------------------------------------
+ * Organic separates on ground, not rules: cream page, warmer card surfaces.
+ */
+
+#prices,
+#book {
+  background: var(--surface-2);
+}
+
+#reviews {
+  background: var(--accent-soft);
+}
+
+/* ---- hero -------------------------------------------------------- */
+
+.hero {
+  padding: 40px var(--gutter) 36px;
+  text-align: center;
+  background: var(--bg);
+}
+
+.hero__crest {
+  margin: 0 auto 16px;
+  width: 40px;
+  height: 40px;
+  color: var(--accent);
+}
+
+.hero--image {
+  padding: 0 0 36px;
+  background: var(--bg);
+}
+
+/*
+ * The imported app's onboarding screen: photograph on top, content sheet
+ * pulled up over its lower edge with a large top radius. That is the same
+ * move the arch was making, so the mehrab is kept and the sheet radius comes
+ * from Organic — one shape language, two systems agreeing.
+ */
+.hero__media {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  margin: 16px var(--gutter) 0;
+  clip-path: url(#mehrab);
+  background: var(--surface);
+  /* Organic's .washed treatment on hero imagery. */
+  filter: saturate(0.72) contrast(0.92) brightness(1.05);
+}
+
+.hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero__media::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -1px 0;
+  height: 40%;
+  background: linear-gradient(180deg, rgba(245, 234, 216, 0) 0%, rgba(245, 234, 216, 0.6) 60%, #f5ead8 100%);
+}
+
+.hero__media::before {
+  content: "";
+  position: absolute;
+  inset: -9px -9px 0 -9px;
+  clip-path: url(#mehrab);
+  background: var(--accent-brand);
+  opacity: 0.22;
+  z-index: -1;
+}
+
+.hero--image .hero__body {
+  position: relative;
+  z-index: 1;
+  margin: -92px var(--gutter) 0;
+  background: var(--bg);
+  border-radius: 32px 32px var(--radius) var(--radius);
+  padding: 28px 22px 24px;
+  box-shadow: var(--shadow-soft);
+}
+
+.hero__name {
+  font-size: 44px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+}
+
+.hero--image .hero__name {
+  font-size: 38px;
+}
+
+.hero__kicker {
+  margin-top: 12px;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.rule {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin: 18px auto 0;
+  max-width: 190px;
+}
+
+.rule i {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--hairline) 45%, var(--hairline) 55%, transparent);
+}
+
+.rule__mark {
+  color: var(--accent-brand);
+  flex: none;
+}
+
+.hero__tagline {
+  margin-top: 18px;
+  font-size: 20px;
+  line-height: 1.35;
+  font-family: var(--font-display);
+}
+
+.hero__urdu {
+  margin-top: 6px;
+  font-size: 15px;
+  color: var(--fg-dim);
+}
+
+.hero__place {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--fg-dim);
+}
+
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  font-size: 13px;
+  color: var(--fg-dim);
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  padding: 7px 15px;
+}
+
+.rating__stars {
+  color: var(--accent);
+  letter-spacing: 0.1em;
+}
+
+.rating b {
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.hero__cta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+/* ---- buttons: Organic's pill frame -------------------------------- */
+
+.btn {
+  border-radius: var(--radius-pill);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0;
+  padding: 14px 16px;
+}
+
+.btn--primary {
+  background: var(--accent-fill);
+  color: var(--on-accent);
+  box-shadow: none;
+}
+
+.btn--primary:hover {
+  background: #b2622d;
+}
+
+.btn--ghost {
+  background: transparent;
+  border: 1px solid var(--hairline);
+  color: var(--fg);
+}
+
+.btn--ghost:hover {
+  background: color-mix(in srgb, var(--fg) 7%, transparent);
+}
+
+/* ---- trust chips --------------------------------------------------- */
+
+.trust {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.trust span {
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: var(--accent-dk);
+  background: var(--accent-soft);
+  border-radius: var(--radius-pill);
+  padding: 4px 12px;
+  font-weight: 600;
+}
+
+/* ---- packages ------------------------------------------------------ */
+
+.cards {
+  display: grid;
+  gap: 14px;
+  margin-top: 26px;
+}
+
+.card {
+  border: none;
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 24px 22px 20px;
+  position: relative;
+  box-shadow: var(--shadow-soft);
+  transition: box-shadow var(--t) var(--ease);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lift);
+}
+
+.card--featured {
+  background: var(--accent-soft);
+  box-shadow: var(--shadow-lift);
+}
+
+.card__ribbon {
+  position: absolute;
+  top: 0;
+  left: 22px;
+  transform: translateY(-50%);
+  background: var(--accent-fill);
+  color: var(--on-accent);
+  font-family: var(--font-body);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+}
+
+.card h3 {
+  font-size: 25px;
+  letter-spacing: -0.015em;
+}
+
+.card__urdu {
+  font-size: 14px;
+  color: var(--fg-dim);
+  margin-top: 2px;
+}
+
+.card__price {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 14px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.card__cur {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--fg-dim);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.card__amt {
+  font-size: 38px;
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.card__unit {
+  font-size: 13px;
+  color: var(--fg-dim);
+}
+
+.card ul {
+  list-style: none;
+  margin-top: 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.card li {
+  font-size: 14px;
+  color: var(--fg-dim);
+  display: flex;
+  gap: 10px;
+  line-height: 1.5;
+}
+
+.card li i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-brand);
+  flex: none;
+  margin-top: 8px;
+  font-size: 0;
+}
+
+.card__cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  padding: 13px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--fg);
+  transition: background var(--t) var(--ease), border-color var(--t) var(--ease);
+}
+
+.card__cta:hover {
+  background: color-mix(in srgb, var(--fg) 7%, transparent);
+}
+
+.card--featured .card__cta {
+  background: var(--accent-fill);
+  color: var(--on-accent);
+  border-color: transparent;
+}
+
+/* ---- price menu ---------------------------------------------------- */
+
+.menu {
+  margin-top: 26px;
+}
+
+.menu__group + .menu__group {
+  margin-top: 28px;
+}
+
+.menu__heading {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.menu__row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rule);
+  transition: color var(--t) var(--ease);
+}
+
+.menu__row:last-child {
+  border-bottom: none;
+}
+
+.menu__name {
+  font-size: 15px;
+  flex: 1;
+  font-weight: 600;
+}
+
+.menu__name small {
+  display: block;
+  color: var(--fg-dim);
+  font-size: 12px;
+  margin-top: 2px;
+  font-weight: 400;
+}
+
+.menu__dots {
+  flex: 1;
+  min-width: 14px;
+  border-bottom: 1px dotted var(--hairline);
+  transform: translateY(-4px);
+}
+
+.menu__price {
+  font-size: 20px;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  flex: none;
+}
+
+/* ---- booking form -------------------------------------------------- */
+
+.form {
+  display: grid;
+  gap: 14px;
+  margin-top: 26px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow-soft);
+}
+
+.field label {
+  display: block;
+  font-size: 12px;
+  margin-bottom: 6px;
+  color: var(--fg-dim);
+  font-weight: 600;
+}
+
+/* Organic's .input: pill, cream fill, 14px. */
+.field input,
+.field select {
+  width: 100%;
+  min-height: 44px;
+  background: var(--bg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  color: var(--fg);
+  padding: 10px 14px;
+  /* 16px minimum or iOS Safari zooms the viewport on focus — this overrides
+   * the system's 14px, which would trigger that zoom on a real phone. */
+  font-size: 16px;
+  transition: border-color var(--t) var(--ease);
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: var(--accent-brand);
+}
+
+.field input::placeholder {
+  color: var(--fg-faint);
+}
+
+.form__note {
+  font-size: 12px;
+  color: var(--fg-dim);
+  text-align: center;
+}
+
+/* ---- gallery ------------------------------------------------------- */
+
+.gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 26px;
+  align-items: start;
+  padding-bottom: 16px;
+}
+
+.tile {
+  aspect-ratio: 3 / 4;
+  clip-path: url(#mehrab-soft);
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 12px;
+  background: var(--surface);
+}
+
+.gallery .tile:nth-child(even) {
+  transform: translateY(16px);
+}
+
+.tile img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tile figcaption {
+  position: relative;
+  z-index: 1;
+}
+
+.tile span {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  font-weight: 700;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+}
+
+.tile::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 45%;
+  background: linear-gradient(180deg, transparent, rgba(32, 30, 29, 0.6));
+}
+
+.tile--ph::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.tile--ph:nth-child(4n + 1)::before { background: linear-gradient(150deg, #ffc6a5, #d67f48); }
+.tile--ph:nth-child(4n + 2)::before { background: linear-gradient(150deg, #e1eecc, #8fa073); }
+.tile--ph:nth-child(4n + 3)::before { background: linear-gradient(150deg, #ffe1d0, #c0b6a5); }
+.tile--ph:nth-child(4n)::before      { background: linear-gradient(150deg, #dcd3c4, #a19786); }
+
+/* ---- reviews ------------------------------------------------------- */
+
+.reviews {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.review {
+  background: var(--bg);
+  border: none;
+  border-radius: var(--radius);
+  padding: 22px 20px 18px;
+  box-shadow: var(--shadow-soft);
+}
+
+.review:first-child {
+  background: var(--accent-2-soft);
+}
+
+.review__quote {
+  font-size: 19px;
+  line-height: 1.35;
+  color: var(--fg);
+  letter-spacing: -0.01em;
+}
+
+.review__by {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+}
+
+/* The accent circle holding a single letter — lifted from the imported app's
+ * onboarding badge, where the same device carries the salon's initial. */
+.review__mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  flex: none;
+  display: grid;
+  place-items: center;
+  background: var(--accent-fill);
+  color: var(--on-accent);
+  font-family: var(--font-display);
+  font-size: 15px;
+  line-height: 1;
+}
+
+.review__who b {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--fg);
+}
+
+.review__who small {
+  display: block;
+  font-size: 12px;
+  color: var(--fg-dim);
+  margin-top: 1px;
+}
+
+/* ---- find us ------------------------------------------------------- */
+
+.info {
+  margin-top: 24px;
+  background: var(--surface);
+  border: none;
+  border-radius: var(--radius);
+  padding: 6px 20px;
+  box-shadow: var(--shadow-soft);
+}
+
+.info__row {
+  display: flex;
+  gap: 16px;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.info__row:last-child {
+  border-bottom: none;
+}
+
+.info__k {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  width: 62px;
+  flex: none;
+  padding-top: 4px;
+  font-weight: 700;
+}
+
+.info__v {
+  font-size: 15px;
+}
+
+.info__v small {
+  display: block;
+  color: var(--fg-dim);
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+.maplink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-top: 16px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  padding: 14px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  background: var(--bg);
+}
+
+/* ---- footer -------------------------------------------------------- */
+
+.foot {
+  padding: 32px var(--gutter) 36px;
+  text-align: center;
+  color: var(--fg-faint);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}

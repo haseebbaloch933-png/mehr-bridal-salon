@@ -20,7 +20,14 @@
  * alternative — kept because it suits a jewellery-adjacent or menswear
  * grooming brand, and because having two to show closes sales faster.
  */
-export type Skin = 'salon' | 'salon-noir' | 'dental' | 'gym' | 'bakery' | 'tailor';
+export type Skin =
+  | 'salon'
+  | 'salon-organic'
+  | 'salon-noir'
+  | 'dental'
+  | 'gym'
+  | 'bakery'
+  | 'tailor';
 
 /** Shown as an Urdu subtitle under English headings. Optional everywhere. */
 export type Bilingual = {
@@ -187,7 +194,15 @@ export type ClientSite = {
 
 export class ContentError extends Error {}
 
-const SKINS: Skin[] = ['salon', 'salon-noir', 'dental', 'gym', 'bakery', 'tailor'];
+const SKINS: Skin[] = [
+  'salon',
+  'salon-organic',
+  'salon-noir',
+  'dental',
+  'gym',
+  'bakery',
+  'tailor',
+];
 
 function req(cond: unknown, msg: string): asserts cond {
   if (!cond) throw new ContentError(msg);
