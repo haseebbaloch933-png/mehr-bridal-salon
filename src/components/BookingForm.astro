@@ -1,0 +1,90 @@
+---
+import type { ClientSite } from '../lib/schema';
+import { intlPhone } from '../lib/format';
+import Icon from './Icon.astro';
+
+interface Props {
+  client: ClientSite;
+}
+const { client } = Astro.props;
+const { booking, business, contact } = client;
+
+const phone = intlPhone(contact.whatsapp);
+const heading = booking?.heading ?? 'Reserve your seat';
+const askDate = booking?.askDate ?? true;
+---
+
+{
+  booking?.enabled && (
+    <section class="section reveal" id="book">
+      <p class="eyebrow">Appointment · <span class="urdu">اپوائنٹمنٹ</span></p>
+      <h2 class="h2">{heading}</h2>
+      <p class="sub">Fill this in and WhatsApp opens with your details already written.</p>
+
+      <div class="form">
+        <div class="field">
+          <label for="bk-name">Your name</label>
+          <input id="bk-name" type="text" autocomplete="name" placeholder="Ayesha Khan" />
+        </div>
+
+        <div class="field">
+          <label for="bk-service">Service</label>
+          <select id="bk-service">
+            {booking.serviceOptions.map((o) => (
+              <option>{o}</option>
+            ))}
+          </select>
+        </div>
+
+        {askDate && (
+          <div class="field">
+            <label for="bk-date">Date you need</label>
+            <input id="bk-date" type="date" />
+          </div>
+        )}
+
+        <button class="btn btn--wa" type="button" id="bk-send">
+          <Icon name="whatsapp" />
+          Send on WhatsApp
+        </button>
+
+        <p class="form__note">Nothing sends until you press send inside WhatsApp.</p>
+      </div>
+
+      {/*
+        Deliberately not a <form>. There is no server to post to and no
+        endpoint to leak data into — the browser hands the message straight to
+        WhatsApp. No data touches any third party, which is also the honest
+        answer when an owner asks where enquiries are stored.
+      */}
+      <script
+        is:inline
+        define:vars={{ phone, businessName: business.name, askDate }}
+      >
+        (function () {
+          var btn = document.getElementById('bk-send');
+          if (!btn) return;
+          btn.addEventListener('click', function () {
+            var name = (document.getElementById('bk-name') || {}).value || '';
+            var service = (document.getElementById('bk-service') || {}).value || '';
+            var dateEl = document.getElementById('bk-date');
+            var date = dateEl && dateEl.value ? dateEl.value : 'to be confirmed';
+
+            var lines = [
+              'Assalam o alaikum!',
+              '',
+              'I would like to book an appointment at ' + businessName + '.',
+              '',
+              'Name: ' + (name.trim() || '—'),
+              'Service: ' + service,
+            ];
+            if (askDate) lines.push('Date: ' + date);
+
+            window.location.href =
+              'https://wa.me/' + phone + '?text=' + encodeURIComponent(lines.join('\n'));
+          });
+        })();
+      </script>
+    </section>
+  )
+}

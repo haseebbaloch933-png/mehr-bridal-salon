@@ -1,0 +1,76 @@
+---
+import type { ClientSite } from '../lib/schema';
+import { telHref } from '../lib/format';
+import { waLink, enquiryMessage } from '../lib/whatsapp';
+import Icon from './Icon.astro';
+
+interface Props {
+  client: ClientSite;
+}
+const { client } = Astro.props;
+const { business, contact, location, rating, trust } = client;
+
+const wa = waLink(contact.whatsapp, enquiryMessage(business.name));
+const tel = telHref(contact.phone ?? contact.whatsapp);
+
+// Full stars only. A half-star glyph renders inconsistently across the Android
+// font stack, and the numeral beside it carries the precision anyway.
+const stars = '★'.repeat(Math.round(rating?.score ?? 0));
+---
+
+<header class="hero">
+  <svg class="hero__crest" viewBox="0 0 44 44" aria-hidden="true">
+    <circle cx="22" cy="22" r="20.5" fill="none" stroke="currentColor" stroke-width="1" opacity=".55" style="color:var(--accent)"></circle>
+    <path
+      d="M22 8c3.2 5.4 5.6 8.4 10 10-4.4 1.6-6.8 4.6-10 10-3.2-5.4-5.6-8.4-10-10 4.4-1.6 6.8-4.6 10-10Z"
+      fill="var(--accent)"
+      opacity=".9"></path>
+    <path
+      d="M22 30c1.7 2.8 2.9 4.3 5.2 5.2-2.3.9-3.5 2.4-5.2 5.2-1.7-2.8-2.9-4.3-5.2-5.2 2.3-.9 3.5-2.4 5.2-5.2Z"
+      fill="var(--accent)"
+      opacity=".5"></path>
+  </svg>
+
+  <h1 class="hero__name">{business.name}</h1>
+  <p class="hero__kicker">{business.tagline}</p>
+
+  <div class="rule" aria-hidden="true"><i></i><b></b><i></i></div>
+
+  {business.nameUrdu && <p class="urdu hero__place">{business.nameUrdu}</p>}
+
+  <p class="hero__place">
+    {location.area}, {location.city}{business.established && ` · Est. ${business.established}`}
+  </p>
+
+  {
+    rating && (
+      <p class="rating">
+        <span class="rating__stars" aria-hidden="true">{stars}</span>
+        <b>{rating.score}</b>
+        <span aria-hidden="true">·</span>
+        <span><b>{rating.count}</b> reviews</span>
+      </p>
+    )
+  }
+
+  <div class="hero__cta">
+    <a class="btn btn--primary" href={wa} rel="noopener">
+      <Icon name="whatsapp" />
+      Book now
+    </a>
+    <a class="btn btn--ghost" href={tel}>
+      <Icon name="phone" />
+      Call us
+    </a>
+  </div>
+
+  {
+    trust && trust.length > 0 && (
+      <div class="trust">
+        {trust.map((t) => (
+          <span>{t}</span>
+        ))}
+      </div>
+    )
+  }
+</header>

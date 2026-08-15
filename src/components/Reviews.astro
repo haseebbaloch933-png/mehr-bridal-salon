@@ -1,0 +1,27 @@
+---
+import type { ClientSite } from '../lib/schema';
+
+interface Props {
+  client: ClientSite;
+}
+const { client } = Astro.props;
+const { reviews } = client;
+---
+
+{
+  reviews && reviews.length > 0 && (
+    <section class="section reveal" id="reviews">
+      <p class="eyebrow">In their words</p>
+
+      {reviews.map((r) => (
+        <blockquote class="review">
+          <p class="review__quote">&ldquo;{r.quote}&rdquo;</p>
+          <footer class="review__who">
+            {r.author}
+            {r.meta && ` · ${r.meta}`}
+          </footer>
+        </blockquote>
+      ))}
+    </section>
+  )
+}

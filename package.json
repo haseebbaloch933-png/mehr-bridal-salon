@@ -1,0 +1,24 @@
+{
+  "name": "site-engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "One engine, five skins. Static sites for Islamabad local businesses, driven by a single JSON per client.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && node scripts/check-weight.mjs",
+    "preview": "astro preview",
+    "check": "astro check",
+    "new-client": "node scripts/new-client.mjs",
+    "weight": "node scripts/check-weight.mjs"
+  },
+  "dependencies": {
+    "astro": "^5.14.1",
+    "sharp": "^0.34.4"
+  },
+  "allowScripts": {
+    "esbuild@0.27.7": true,
+    "esbuild@0.25.12": true,
+    "sharp@0.34.5": true
+  }
+}

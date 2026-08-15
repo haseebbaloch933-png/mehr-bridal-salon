@@ -1,0 +1,55 @@
+---
+import type { ClientSite } from '../lib/schema';
+import { displayPhone, telHref, mapsHref } from '../lib/format';
+import Icon from './Icon.astro';
+
+interface Props {
+  client: ClientSite;
+}
+const { client } = Astro.props;
+const { location, contact } = client;
+
+const mapQuery = location.mapQuery ?? `${location.addressLine}, ${location.city}`;
+const callNumber = contact.phone ?? contact.whatsapp;
+---
+
+<section class="section reveal" id="find">
+  <p class="eyebrow">Visit · <span class="urdu">پتہ</span></p>
+  <h2 class="h2">Find us</h2>
+
+  <div class="info">
+    <div class="info__row">
+      <div class="info__k">Where</div>
+      <div class="info__v">
+        {location.addressLine}
+        <small>{location.area}, {location.city}</small>
+      </div>
+    </div>
+
+    <div class="info__row">
+      <div class="info__k">Open</div>
+      <div class="info__v">
+        {
+          location.hours.map((h) => (
+            <div>
+              {h.days} — {h.hours}
+            </div>
+          ))
+        }
+        {location.note && <small>{location.note}</small>}
+      </div>
+    </div>
+
+    <div class="info__row">
+      <div class="info__k">Call</div>
+      <div class="info__v">
+        <a href={telHref(callNumber)}>{displayPhone(callNumber)}</a>
+      </div>
+    </div>
+  </div>
+
+  <a class="maplink" href={mapsHref(mapQuery)} rel="noopener" target="_blank">
+    <Icon name="pin" />
+    Open in Google Maps
+  </a>
+</section>

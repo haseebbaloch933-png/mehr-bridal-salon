@@ -1,0 +1,26 @@
+---
+import type { ClientSite } from '../lib/schema';
+import { telHref } from '../lib/format';
+import { waLink, enquiryMessage } from '../lib/whatsapp';
+
+interface Props {
+  client: ClientSite;
+}
+const { client } = Astro.props;
+const { business, contact } = client;
+
+/*
+ * Always on screen. No hamburger menu anywhere on these sites — hidden
+ * navigation costs conversions, and the only two things a visitor ever needs
+ * are "message them" and "ring them".
+ */
+---
+
+<nav class="bar" aria-label="Contact">
+  <div class="bar__in">
+    <a class="btn btn--wa" rel="noopener" href={waLink(contact.whatsapp, enquiryMessage(business.name))}>
+      WhatsApp
+    </a>
+    <a class="btn btn--primary" href={telHref(contact.phone ?? contact.whatsapp)}> Call </a>
+  </div>
+</nav>

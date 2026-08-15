@@ -1,0 +1,57 @@
+---
+import type { ClientSite } from '../lib/schema';
+import { pkr } from '../lib/format';
+import { waLink, packageMessage } from '../lib/whatsapp';
+
+interface Props {
+  client: ClientSite;
+}
+const { client } = Astro.props;
+const { packages, packagesHeading, business, contact } = client;
+
+const heading = packagesHeading?.en ?? 'Packages';
+const urdu = packagesHeading?.ur;
+---
+
+{
+  packages && packages.length > 0 && (
+    <section class="section reveal" id="packages">
+      <p class="eyebrow">{urdu ? <>{heading} · <span class="urdu">{urdu}</span></> : heading}</p>
+      <h2 class="h2">Choose what suits you</h2>
+
+      <div class="cards">
+        {packages.map((p) => (
+          <article class={p.featured ? 'card card--featured' : 'card'}>
+            {p.featured && p.ribbon && <span class="card__ribbon">{p.ribbon}</span>}
+
+            <h3>{p.name}</h3>
+            {p.nameUrdu && <p class="card__urdu urdu">{p.nameUrdu}</p>}
+
+            <p class="card__price">
+              <span class="card__cur">PKR</span>
+              <span class="card__amt">{pkr(p.price)}</span>
+              {p.unit && <span class="card__unit">/ {p.unit}</span>}
+            </p>
+
+            <ul>
+              {p.items.map((it) => (
+                <li>
+                  <i aria-hidden="true">◆</i>
+                  <span>{it}</span>
+                </li>
+              ))}
+            </ul>
+
+            <a
+              class="card__cta"
+              rel="noopener"
+              href={waLink(contact.whatsapp, packageMessage(business.name, p.name, pkr(p.price)))}
+            >
+              Enquire on WhatsApp
+            </a>
+          </article>
+        ))}
+      </div>
+    </section>
+  )
+}

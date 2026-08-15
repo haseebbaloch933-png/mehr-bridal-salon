@@ -1,0 +1,40 @@
+---
+import { validateClient } from '../lib/schema';
+import Site from '../layouts/Site.astro';
+import Hero from '../components/Hero.astro';
+import Packages from '../components/Packages.astro';
+import PriceMenu from '../components/PriceMenu.astro';
+import BookingForm from '../components/BookingForm.astro';
+import Gallery from '../components/Gallery.astro';
+import Reviews from '../components/Reviews.astro';
+import FindUs from '../components/FindUs.astro';
+import StickyBar from '../components/StickyBar.astro';
+
+/*
+ * One page, one client. CLIENT=<id> npm run build.
+ *
+ * Validation runs at build time and throws, so a malformed price or a missing
+ * WhatsApp number fails the build rather than shipping a broken shop.
+ */
+const clientId = import.meta.env.CLIENT ?? process.env.CLIENT ?? 'meher-salon';
+const raw = await import(`../../clients/${clientId}.json`);
+const client = validateClient(raw.default);
+
+const year = new Date().getFullYear();
+---
+
+<Site client={client}>
+  <Hero client={client} />
+  <Packages client={client} />
+  <PriceMenu client={client} />
+  <BookingForm client={client} />
+  <Gallery client={client} />
+  <Reviews client={client} />
+  <FindUs client={client} />
+
+  <footer class="foot">
+    {client.business.name} · {client.location.area}, {client.location.city} · {year}
+  </footer>
+</Site>
+
+<StickyBar client={client} />

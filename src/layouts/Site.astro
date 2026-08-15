@@ -1,0 +1,103 @@
+---
+import type { ClientSite } from '../lib/schema';
+import { intlPhone, mapsHref } from '../lib/format';
+import '../styles/base.css';
+
+interface Props {
+  client: ClientSite;
+}
+const { client } = Astro.props;
+const { business, contact, location, rating, seo } = client;
+
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+const mapQuery = location.mapQuery ?? `${location.addressLine}, ${location.city}`;
+
+/*
+ * Schema.org LocalBusiness.
+ *
+ * This is the cheapest line of code in the project and one of the highest
+ * value: it is what puts hours, phone and rating into the Google result
+ * itself. For a business whose customers all arrive via Google search, that
+ * panel is worth more than most of the page below it.
+ */
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: business.name,
+  description: seo.description,
+  url: canonical,
+  telephone: `+${intlPhone(contact.phone ?? contact.whatsapp)}`,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: location.addressLine,
+    addressLocality: location.city,
+    addressCountry: 'PK',
+  },
+  ...(rating
+    ? {
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: rating.score,
+          reviewCount: rating.count,
+        },
+      }
+    : {}),
+  hasMap: mapsHref(mapQuery),
+};
+---
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{seo.title}</title>
+    <meta name="description" content={seo.description} />
+    {canonical && <link rel="canonical" href={canonical} />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={seo.title} />
+    <meta property="og:description" content={seo.description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta name="theme-color" content="#171018" />
+
+    <!-- Skin is chosen by the client file. One line, whole new trade. -->
+    {business.skin === 'salon' && <style set:html={await import('../skins/salon.css?raw').then((m) => m.default)} />}
+
+    <script is:inline set:html={JSON.stringify(jsonLd)} type="application/ld+json" />
+
+    <!-- Flips before first paint so reveal animations never hide content
+         from a visitor with JavaScript disabled or blocked. -->
+    <script is:inline>
+      document.documentElement.classList.remove('no-js');
+    </script>
+  </head>
+
+  <body>
+    <div class="page">
+      <slot />
+    </div>
+
+    <script is:inline>
+      (function () {
+        var els = document.querySelectorAll('.reveal');
+        if (!('IntersectionObserver' in window)) {
+          for (var i = 0; i < els.length; i++) els[i].classList.add('is-in');
+          return;
+        }
+        var io = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) {
+                e.target.classList.add('is-in');
+                io.unobserve(e.target);
+              }
+            });
+          },
+          { rootMargin: '0px 0px -8% 0px' }
+        );
+        for (var j = 0; j < els.length; j++) io.observe(els[j]);
+      })();
+    </script>
+  </body>
+</html>

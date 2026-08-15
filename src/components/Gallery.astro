@@ -1,0 +1,37 @@
+---
+import type { ClientSite } from '../lib/schema';
+
+interface Props {
+  client: ClientSite;
+}
+const { client } = Astro.props;
+const { gallery } = client;
+---
+
+{
+  gallery && gallery.length > 0 && (
+    <section class="section reveal" id="work">
+      <p class="eyebrow">Portfolio</p>
+      <h2 class="h2">Recent work</h2>
+
+      <div class="gallery">
+        {gallery.map((t, i) => (
+          <figure class={t.image ? 'tile' : 'tile tile--ph'}>
+            {t.image && (
+              <img
+                src={t.image}
+                alt={t.alt ?? t.label}
+                /* First row is above the fold on most phones; the rest waits. */
+                loading={i < 2 ? 'eager' : 'lazy'}
+                decoding="async"
+                width="240"
+                height="320"
+              />
+            )}
+            <figcaption><span>{t.label}</span></figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+  )
+}

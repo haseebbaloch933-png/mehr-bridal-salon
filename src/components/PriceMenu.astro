@@ -1,0 +1,63 @@
+---
+import type { ClientSite } from '../lib/schema';
+import { pkr } from '../lib/format';
+import { waLink, menuItemMessage } from '../lib/whatsapp';
+
+interface Props {
+  client: ClientSite;
+}
+const { client } = Astro.props;
+const { menu, menuHeading, business, contact } = client;
+
+/*
+ * The single highest-value page on a salon site.
+ *
+ * The owner's stated problem is that the phone rings all day with people asking
+ * prices. Publishing the list buys them back an hour a day — which is the
+ * argument that actually closes the sale, not "you'll rank on Google".
+ */
+const heading = menuHeading?.en ?? 'Price list';
+const urdu = menuHeading?.ur;
+---
+
+{
+  menu && menu.length > 0 && (
+    <section class="section reveal" id="prices">
+      <p class="eyebrow">{urdu ? <>{heading} · <span class="urdu">{urdu}</span></> : heading}</p>
+      <h2 class="h2">Everything, with prices</h2>
+      <p class="sub">No need to call and ask. Tap any item to book it on WhatsApp.</p>
+
+      <div class="menu">
+        {menu.map((group) => (
+          <div class="menu__group">
+            <h3 class="menu__heading">
+              {group.heading}
+              {group.headingUrdu && <span class="urdu"> · {group.headingUrdu}</span>}
+            </h3>
+
+            {group.items.map((item) => (
+              <a
+                class="menu__row"
+                rel="noopener"
+                href={waLink(
+                  contact.whatsapp,
+                  menuItemMessage(business.name, item.name, pkr(item.price))
+                )}
+              >
+                <span class="menu__name">
+                  {item.name}
+                  {item.note && <small>{item.note}</small>}
+                </span>
+                <span class="menu__dots" aria-hidden="true" />
+                <span class="menu__price">
+                  {item.from && <span style="font-size:12px;opacity:.7">from </span>}
+                  {pkr(item.price)}
+                </span>
+              </a>
+            ))}
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
