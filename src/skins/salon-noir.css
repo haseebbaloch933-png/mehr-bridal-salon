@@ -61,6 +61,20 @@
   --shadow-wa: 0 8px 30px -12px rgba(37, 211, 102, 0.7);
 }
 
+/* ---- section separation ------------------------------------------
+ * This skin separates on a hairline rather than a change of ground: on a dark
+ * plum field two tones close enough to feel continuous are too close to see at
+ * all. Base sets spacing only, so each skin states its own rule here.
+ */
+
+.section {
+  border-top: 1px solid var(--rule);
+}
+
+.section:first-of-type {
+  border-top: none;
+}
+
 /* ---- hero -------------------------------------------------------- */
 
 .hero {

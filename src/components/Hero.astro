@@ -5,6 +5,7 @@ import { telHref } from '../lib/format';
 import { waLink, enquiryMessage } from '../lib/whatsapp';
 import { clientImage } from '../lib/images';
 import Icon from './Icon.astro';
+import Boteh from './Boteh.astro';
 
 interface Props {
   client: ClientSite;
@@ -43,23 +44,19 @@ const stars = '★'.repeat(Math.round(rating?.score ?? 0));
   }
 
   <div class="hero__body">
-    {
-      !hero && (
-        <svg class="hero__crest" viewBox="0 0 44 44" aria-hidden="true">
-          <circle cx="22" cy="22" r="20.5" fill="none" stroke="currentColor" stroke-width="1" opacity=".5" />
-          <path
-            d="M22 8c3.2 5.4 5.6 8.4 10 10-4.4 1.6-6.8 4.6-10 10-3.2-5.4-5.6-8.4-10-10 4.4-1.6 6.8-4.6 10-10Z"
-            fill="currentColor"
-            opacity=".85"
-          />
-        </svg>
-      )
-    }
+    {!hero && <Boteh class="hero__crest" size={44} />}
 
     <h1 class="hero__name">{business.name}</h1>
     <p class="hero__kicker">{business.tagline}</p>
 
-    <div class="rule" aria-hidden="true"><i></i><b></b><i></i></div>
+    {/* Two botehs turned to face each other, the way the motif is laid out on
+        a dupatta border — the mirrored pair is the traditional arrangement. */}
+    <div class="rule" aria-hidden="true">
+      <i></i>
+      <Boteh class="rule__mark" size={17} flip />
+      <Boteh class="rule__mark" size={17} />
+      <i></i>
+    </div>
 
     {business.nameUrdu && <p class="urdu hero__urdu">{business.nameUrdu}</p>}
 

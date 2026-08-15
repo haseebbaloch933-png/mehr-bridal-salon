@@ -100,6 +100,28 @@ const jsonLd = {
   </head>
 
   <body>
+    {/*
+      Shared clip paths, in objectBoundingBox units so one definition scales to
+      any element. The mehrab is the pointed arch of a Mughal niche — the shape
+      of a jharokha window and of the backdrop every Pakistani bride is
+      photographed against. Using it to frame the photography roots the page in
+      something real rather than applying a generic rounded corner.
+    */}
+    <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+      <defs>
+        <clipPath id="mehrab" clipPathUnits="objectBoundingBox">
+          <path
+            d="M0,1 L0,0.45 C0,0.22 0.26,0.06 0.5,0 C0.74,0.06 1,0.22 1,0.45 L1,1 Z"
+          ></path>
+        </clipPath>
+        <clipPath id="mehrab-soft" clipPathUnits="objectBoundingBox">
+          <path
+            d="M0,1 L0,0.30 C0,0.13 0.24,0.02 0.5,0 C0.76,0.02 1,0.13 1,0.30 L1,1 Z"
+          ></path>
+        </clipPath>
+      </defs>
+    </svg>
+
     <div class="page">
       <slot />
     </div>

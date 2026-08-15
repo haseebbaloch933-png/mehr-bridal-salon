@@ -129,13 +129,24 @@
 
 .hero--image {
   padding: 0 0 40px;
-  background: none;
+  /* Off-centre bloom. A perfectly centred wash reads as a gradient preset;
+   * pushing it left of the arch makes the light feel like it comes from a
+   * window rather than from the CSS. */
+  background:
+    radial-gradient(70% 46% at 22% 12%, #fdf3ef 0%, transparent 64%),
+    radial-gradient(58% 40% at 88% 40%, #f8eeee 0%, transparent 60%),
+    linear-gradient(180deg, #fbf7f3, #f9f2ed);
 }
 
+/* The photograph sits inside a mehrab — the pointed niche of a Mughal
+ * jharokha, and the shape of the backdrop every bride is photographed against.
+ * Inset slightly so the arch reads as an aperture cut into the page rather
+ * than a cropped banner. */
 .hero__media {
   position: relative;
-  aspect-ratio: 4 / 5;
-  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  margin: 18px var(--gutter) 0;
+  clip-path: url(#mehrab);
   background: var(--surface-2);
 }
 
@@ -145,14 +156,25 @@
   object-fit: cover;
 }
 
-/* Ivory fade into the card below, so the photograph dissolves into the page
- * rather than ending on a hard line. */
+/* Ivory fade at the foot so the photograph dissolves into the card below. */
 .hero__media::after {
   content: "";
   position: absolute;
   inset: auto 0 -1px 0;
-  height: 42%;
-  background: linear-gradient(180deg, rgba(251, 247, 243, 0) 0%, rgba(251, 247, 243, 0.72) 58%, #fbf7f3 100%);
+  height: 38%;
+  background: linear-gradient(180deg, rgba(251, 247, 243, 0) 0%, rgba(251, 247, 243, 0.62) 62%, #fbf7f3 100%);
+}
+
+/* A second arch, offset behind the first as a hairline. Reads as the recessed
+ * moulding around a real niche and stops the shape feeling like a sticker. */
+.hero__media::before {
+  content: "";
+  position: absolute;
+  inset: -9px -9px 0 -9px;
+  clip-path: url(#mehrab);
+  background: var(--accent-lt);
+  opacity: 0.3;
+  z-index: -1;
 }
 
 .hero--image .hero__body {
@@ -194,22 +216,22 @@
 .rule {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin: 22px auto 0;
-  max-width: 160px;
+  justify-content: center;
+  gap: 7px;
+  margin: 20px auto 0;
+  max-width: 190px;
 }
 
 .rule i {
   flex: 1;
   height: 1px;
-  background: var(--hairline);
+  /* Fades out at the ends rather than stopping dead — a drawn line, not a
+   * ruled one. */
+  background: linear-gradient(90deg, transparent, var(--hairline) 45%, var(--hairline) 55%, transparent);
 }
 
-.rule b {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: var(--bronze);
+.rule__mark {
+  color: var(--accent-lt);
   flex: none;
 }
 
@@ -282,6 +304,22 @@
   border-radius: var(--radius-pill);
   padding: 7px 14px;
   font-weight: 500;
+}
+
+/* ---- section flow ------------------------------------------------
+ * Hairline rules between sections are replaced by alternating grounds. Two
+ * tones a few percent apart separate the page without drawing a line across
+ * it — the eye reads a change of light rather than a border, which is what
+ * makes a long scroll feel continuous instead of stacked.
+ */
+
+#prices,
+#book {
+  background: var(--surface);
+}
+
+#reviews {
+  background: linear-gradient(180deg, #fbf7f3, #f9f0ef 40%, #fbf7f3);
 }
 
 /* ---- packages ---------------------------------------------------- */
@@ -557,15 +595,28 @@
   margin-top: 28px;
 }
 
+/* Same arch, gentler spring — at tile scale the full mehrab crops too much off
+ * the top of a face. Repeating the motif at two weights is what makes it read
+ * as a language rather than a one-off flourish in the hero. */
 .tile {
   aspect-ratio: 3 / 4;
-  border-radius: 14px;
+  clip-path: url(#mehrab-soft);
   position: relative;
-  overflow: hidden;
   display: flex;
   align-items: flex-end;
   padding: 12px;
   background: var(--surface-2);
+}
+
+/* Nudge alternate tiles down so the row of arches is uneven, the way a set of
+ * niches along a wall never lines up perfectly. */
+.gallery .tile:nth-child(even) {
+  transform: translateY(16px);
+}
+
+.gallery {
+  align-items: start;
+  padding-bottom: 16px;
 }
 
 .tile img {

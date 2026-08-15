@@ -1,0 +1,212 @@
+{
+  "id": "meher-noir",
+  "_note": "DEMO. Same content as meher-salon rendered in the dark skin, so both directions can be shown to a client side by side.",
+  "business": {
+    "name": "Meher",
+    "tagline": "Bridal & Beauty Studio",
+    "skin": "salon-noir",
+    "established": 2016,
+    "nameUrdu": "مہر",
+    "heroImage": "hero-01.jpg",
+    "heroAlt": "Bridal styling at Meher, Soan Gardens"
+  },
+  "contact": {
+    "whatsapp": "0332 2440314",
+    "phone": "0332 2440314"
+  },
+  "location": {
+    "area": "Soan Gardens",
+    "city": "Islamabad",
+    "addressLine": "Block B, Street 25",
+    "mapQuery": "Soan Gardens Block B Islamabad",
+    "hours": [
+      {
+        "days": "Tue – Sun",
+        "hours": "11:00am – 9:00pm"
+      },
+      {
+        "days": "Monday",
+        "hours": "Closed"
+      }
+    ],
+    "note": "Bridal bookings by appointment only"
+  },
+  "rating": {
+    "score": 4.9,
+    "count": 717,
+    "source": "Google"
+  },
+  "trust": [
+    "Ladies only",
+    "Home service available",
+    "Trial before the day"
+  ],
+  "packagesHeading": {
+    "en": "Bridal",
+    "ur": "دلہن"
+  },
+  "packages": [
+    {
+      "name": "Nikkah",
+      "nameUrdu": "نکاح",
+      "price": 45000,
+      "items": [
+        "Full bridal makeup & hair",
+        "Dupatta setting & draping",
+        "One trial session before the day",
+        "Touch-up kit to take with you"
+      ]
+    },
+    {
+      "name": "Complete Bridal",
+      "nameUrdu": "مکمل برائیڈل",
+      "price": 125000,
+      "featured": true,
+      "ribbon": "Most booked",
+      "items": [
+        "Mehndi, Barat and Walima — all three",
+        "Two trial sessions",
+        "Pre-bridal facial course, 4 sittings",
+        "Hair treatment & polish",
+        "Artist travels to your venue"
+      ]
+    },
+    {
+      "name": "Family & Guests",
+      "nameUrdu": "فیملی",
+      "price": 9500,
+      "unit": "person",
+      "items": [
+        "Party makeup & hair styling",
+        "Saree or dupatta draping",
+        "Group discount from 4 people"
+      ]
+    }
+  ],
+  "menuHeading": {
+    "en": "Price list",
+    "ur": "قیمتیں"
+  },
+  "menu": [
+    {
+      "heading": "Skin",
+      "items": [
+        {
+          "name": "Signature facial",
+          "note": "90 minutes",
+          "price": 6500
+        },
+        {
+          "name": "Hydra glow",
+          "note": "Before an event",
+          "price": 9000
+        },
+        {
+          "name": "Whitening facial",
+          "price": 4500
+        },
+        {
+          "name": "Threading & shaping",
+          "price": 800
+        }
+      ]
+    },
+    {
+      "heading": "Hair",
+      "items": [
+        {
+          "name": "Cut & blow dry",
+          "price": 3500
+        },
+        {
+          "name": "Keratin treatment",
+          "note": "Shoulder length",
+          "price": 18000,
+          "from": true
+        },
+        {
+          "name": "Root colour",
+          "price": 5500
+        },
+        {
+          "name": "Hair spa",
+          "price": 4000
+        }
+      ]
+    },
+    {
+      "heading": "Makeup",
+      "items": [
+        {
+          "name": "Party makeup",
+          "price": 9500
+        },
+        {
+          "name": "Engagement look",
+          "price": 22000
+        },
+        {
+          "name": "Soft glam",
+          "note": "Daytime events",
+          "price": 7000
+        }
+      ]
+    }
+  ],
+  "booking": {
+    "enabled": true,
+    "askDate": true,
+    "heading": "Reserve your seat",
+    "serviceOptions": [
+      "Complete Bridal — PKR 1,25,000",
+      "Nikkah package — PKR 45,000",
+      "Family & guest makeup — PKR 9,500",
+      "Party makeup — PKR 9,500",
+      "Facial or skin treatment",
+      "Hair — cut, colour or keratin"
+    ]
+  },
+  "gallery": [
+    {
+      "label": "Barat",
+      "image": "barat-01.jpg",
+      "alt": "Barat bridal makeup and hair"
+    },
+    {
+      "label": "Mehndi",
+      "image": "mehndi-01.jpg",
+      "alt": "Mehndi day styling"
+    },
+    {
+      "label": "Walima",
+      "image": "walima-01.jpg",
+      "alt": "Walima bridal look"
+    },
+    {
+      "label": "Engagement",
+      "image": "engagement-01.jpg",
+      "alt": "Engagement makeup"
+    }
+  ],
+  "reviews": [
+    {
+      "quote": "They did my barat and walima both. The trial session before the day is what made the difference — nothing was a surprise on the morning.",
+      "author": "Hira",
+      "meta": "Barat & Walima · January 2026"
+    },
+    {
+      "quote": "I booked five months ahead and they still remembered every detail I asked for. My mother and both sisters got ready here too.",
+      "author": "Ayesha",
+      "meta": "Complete Bridal · November 2025"
+    },
+    {
+      "quote": "Prices were exactly what the list said. No surprises at the end, which honestly is the reason I went back for my sister's mehndi.",
+      "author": "Sana",
+      "meta": "Party makeup · regular client"
+    }
+  ],
+  "seo": {
+    "title": "Meher Bridal & Beauty Studio — Soan Gardens, Islamabad",
+    "description": "Bridal packages, party makeup, facials and hair in Soan Gardens, Islamabad. Prices listed. Book on WhatsApp."
+  }
+}

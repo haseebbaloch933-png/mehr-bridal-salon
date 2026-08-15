@@ -87,13 +87,15 @@ textarea {
   overflow-x: clip;
 }
 
+/*
+ * Spacing only. How one section is separated from the next — a rule, a change
+ * of ground, nothing at all — is ornament, and ornament belongs to the skin.
+ * Base used to set a hairline border here, which meant any skin preferring
+ * tonal separation had to override it at equal specificity and lost, since the
+ * skin stylesheet is injected before the bundled base.
+ */
 .section {
   padding: var(--gap-section) var(--gutter);
-  border-top: 1px solid var(--hairline);
-}
-
-.section:first-of-type {
-  border-top: none;
 }
 
 /* ---- typography -------------------------------------------------- */
