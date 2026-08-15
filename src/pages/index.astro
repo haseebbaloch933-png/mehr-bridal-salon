@@ -23,13 +23,21 @@ const client = validateClient(raw.default);
 const year = new Date().getFullYear();
 ---
 
+{/*
+ * Section order follows the hero-testimonials-cta pattern: social proof lands
+ * immediately BEFORE the booking form, not after it.
+ *
+ * The previous order put reviews below the form, so the strongest reason to
+ * trust the salon arrived after the moment of decision. Reordering costs
+ * nothing and is the single highest-leverage change on the page.
+ */}
 <Site client={client}>
   <Hero client={client} />
   <Packages client={client} />
   <PriceMenu client={client} />
-  <BookingForm client={client} />
   <Gallery client={client} />
   <Reviews client={client} />
+  <BookingForm client={client} />
   <FindUs client={client} />
 
   <footer class="foot">

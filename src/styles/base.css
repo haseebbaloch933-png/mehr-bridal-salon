@@ -242,8 +242,13 @@ textarea {
  */
 .reveal {
   opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transform: translateY(14px);
+  /* 380ms, down from 700ms. Seven-tenths of a second per section reads as the
+   * page struggling to load rather than as elegance — on a scroll-reveal the
+   * user is already looking at the space before the content arrives. The small
+   * y offset keeps it a fade rather than a slide. */
+  transition: opacity 0.38s cubic-bezier(0.2, 0.6, 0.3, 1),
+    transform 0.38s cubic-bezier(0.2, 0.6, 0.3, 1);
 }
 
 .reveal.is-in {

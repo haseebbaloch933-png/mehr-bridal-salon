@@ -32,7 +32,11 @@
 
   /* ink — cocoa-plum rather than black. Black on ivory is harsh and cheapens it. */
   --fg: #332529;
-  --fg-dim: #7c6b70;
+  /* Darkened from #7c6b70: that cleared 4.7:1 on the ivory ground but only
+   * 4.29:1 on the blush review card, and the meta line there is 12.5px. A
+   * secondary text colour has to clear on every ground it actually lands on,
+   * not just the page background. #726166 gives 5.45 / 4.98 / 5.81. */
+  --fg-dim: #726166;
   --fg-faint: #a29397;
 
   /* accent — muted rose. Desaturated enough to read grown-up rather than candy.
@@ -83,9 +87,21 @@
   --radius: 16px;
   --radius-pill: 999px;
 
-  --shadow-soft: 0 1px 2px rgba(51, 37, 41, 0.04), 0 10px 30px -18px rgba(51, 37, 41, 0.22);
-  --shadow-accent: 0 10px 26px -14px rgba(169, 107, 118, 0.7);
-  --shadow-wa: 0 10px 26px -14px rgba(37, 211, 102, 0.6);
+  /* Soft depth: a tight contact shadow plus a wide diffuse one. Two layers
+   * read as an object resting on paper; a single blurred drop reads as a
+   * sticker. Deliberately softer and wider than a flat UI would use, without
+   * going full neumorphism — that loses the contrast this palette needs. */
+  --shadow-soft: 0 1px 2px rgba(51, 37, 41, 0.035), 0 4px 10px -6px rgba(51, 37, 41, 0.06),
+    0 18px 44px -24px rgba(51, 37, 41, 0.24);
+  --shadow-lift: 0 2px 4px rgba(51, 37, 41, 0.04), 0 10px 22px -12px rgba(51, 37, 41, 0.12),
+    0 28px 60px -32px rgba(51, 37, 41, 0.3);
+  --shadow-accent: 0 2px 6px -2px rgba(133, 67, 75, 0.28), 0 14px 30px -16px rgba(149, 88, 95, 0.62);
+  --shadow-wa: 0 2px 6px -2px rgba(9, 122, 55, 0.24), 0 14px 30px -16px rgba(37, 211, 102, 0.55);
+
+  /* One transition duration for the whole skin. 220ms: long enough to read as
+   * a state change, short enough not to lag a tap. */
+  --t: 220ms;
+  --ease: cubic-bezier(0.2, 0.6, 0.3, 1);
 }
 
 /* ---- hero -------------------------------------------------------- */
@@ -283,6 +299,7 @@
   padding: 26px 22px 22px;
   position: relative;
   box-shadow: var(--shadow-soft);
+  transition: box-shadow var(--t) var(--ease);
 }
 
 .card--featured {
@@ -388,7 +405,11 @@
   font-size: 14.5px;
   font-weight: 600;
   color: var(--fg);
-  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  transition: background var(--t) var(--ease), border-color var(--t) var(--ease), color var(--t) var(--ease);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lift);
 }
 
 .card__cta:hover {
@@ -430,7 +451,7 @@
   gap: 10px;
   padding: 15px 0;
   border-bottom: 1px solid var(--rule);
-  transition: color 0.15s ease;
+  transition: color var(--t) var(--ease);
 }
 
 .menu__row:last-child {
@@ -504,7 +525,7 @@
   padding: 15px 14px;
   /* 16px minimum or iOS Safari zooms the viewport on focus. */
   font-size: 16px;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  transition: border-color var(--t) var(--ease), background var(--t) var(--ease);
 }
 
 .field input:focus,
@@ -600,29 +621,72 @@
 
 /* ---- reviews ----------------------------------------------------- */
 
-.review {
-  background: var(--accent-soft);
-  border-radius: var(--radius);
-  padding: 26px 24px;
+.reviews {
+  display: grid;
+  gap: 12px;
   margin-top: 26px;
-  text-align: center;
+}
+
+.review {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 24px 22px 20px;
+  box-shadow: var(--shadow-soft);
+}
+
+/* The first testimonial carries the blush ground so the set has a lead voice
+ * rather than three cards of equal weight. */
+.review:first-child {
+  background: var(--accent-soft);
+  border-color: transparent;
 }
 
 .review__quote {
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: 19px;
   line-height: 1.5;
   color: var(--fg);
   letter-spacing: -0.01em;
 }
 
-.review__who {
-  margin-top: 16px;
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--accent-dk);
+.review__by {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule);
+}
+
+/* Initial disc. Not a photograph — see the component note. */
+.review__mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  flex: none;
+  display: grid;
+  place-items: center;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.review__who b {
+  display: block;
+  font-size: 14.5px;
   font-weight: 600;
+  color: var(--fg);
+}
+
+.review__who small {
+  display: block;
+  font-size: 12.5px;
+  color: var(--fg-dim);
+  margin-top: 1px;
 }
 
 /* ---- find us ----------------------------------------------------- */

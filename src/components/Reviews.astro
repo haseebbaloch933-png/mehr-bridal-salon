@@ -5,23 +5,50 @@ interface Props {
   client: ClientSite;
 }
 const { client } = Astro.props;
-const { reviews } = client;
+const { reviews, rating } = client;
+
+/*
+ * Social proof, placed immediately before the booking form.
+ *
+ * The hero-testimonials-cta pattern is explicit that a set of attributed
+ * testimonials should precede the CTA. Each entry carries a name and a
+ * qualifier ("Married Jan 2026") because an unattributed quote reads as
+ * copywriting; a dated one reads as a customer.
+ *
+ * Initials rather than photographs: these are real people, and inventing
+ * stock faces for them would be a lie the client cannot defend if asked.
+ * Swap in real photos only with written permission.
+ */
+const initial = (name: string) => name.trim().charAt(0).toUpperCase();
 ---
 
 {
   reviews && reviews.length > 0 && (
     <section class="section reveal" id="reviews">
       <p class="eyebrow">In their words</p>
+      <h2 class="h2">Brides who trusted us</h2>
+      {rating && (
+        <p class="sub">
+          {rating.score} out of 5, from {rating.count} reviews on Google
+        </p>
+      )}
 
-      {reviews.map((r) => (
-        <blockquote class="review">
-          <p class="review__quote">&ldquo;{r.quote}&rdquo;</p>
-          <footer class="review__who">
-            {r.author}
-            {r.meta && ` · ${r.meta}`}
-          </footer>
-        </blockquote>
-      ))}
+      <div class="reviews">
+        {reviews.map((r) => (
+          <blockquote class="review">
+            <p class="review__quote">&ldquo;{r.quote}&rdquo;</p>
+            <footer class="review__by">
+              <span class="review__mark" aria-hidden="true">
+                {initial(r.author)}
+              </span>
+              <span class="review__who">
+                <b>{r.author}</b>
+                {r.meta && <small>{r.meta}</small>}
+              </span>
+            </footer>
+          </blockquote>
+        ))}
+      </div>
     </section>
   )
 }
