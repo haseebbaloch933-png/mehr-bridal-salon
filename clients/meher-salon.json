@@ -7,7 +7,9 @@
     "tagline": "Bridal & Beauty Studio",
     "skin": "salon",
     "established": 2016,
-    "nameUrdu": "مہر"
+    "nameUrdu": "مہر",
+    "heroImage": "hero-01.jpg",
+    "heroAlt": "Bridal styling at Meher, Soan Gardens"
   },
 
   "contact": {

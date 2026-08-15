@@ -105,6 +105,55 @@
   color: var(--accent);
 }
 
+/* ---- hero with photography ---------------------------------------
+ * When a real photograph exists it leads, and the type moves onto a card
+ * that overlaps its lower edge. The overlap is what stops this reading as
+ * a stock banner with a caption underneath.
+ */
+
+.hero--image {
+  padding: 0 0 40px;
+  background: none;
+}
+
+.hero__media {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Ivory fade into the card below, so the photograph dissolves into the page
+ * rather than ending on a hard line. */
+.hero__media::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -1px 0;
+  height: 42%;
+  background: linear-gradient(180deg, rgba(251, 247, 243, 0) 0%, rgba(251, 247, 243, 0.72) 58%, #fbf7f3 100%);
+}
+
+.hero--image .hero__body {
+  position: relative;
+  z-index: 1;
+  margin: -104px var(--gutter) 0;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 30px 22px 26px;
+  box-shadow: 0 2px 4px rgba(51, 37, 41, 0.03), 0 22px 50px -28px rgba(51, 37, 41, 0.3);
+}
+
+.hero--image .hero__name {
+  font-size: 46px;
+}
+
 .hero__name {
   font-family: var(--font-display);
   font-size: 52px;
@@ -153,6 +202,12 @@
   font-family: var(--font-display);
   font-size: 21px;
   line-height: 1.4;
+}
+
+.hero__urdu {
+  margin-top: 6px;
+  font-size: 15px;
+  color: var(--fg-dim);
 }
 
 .hero__place {

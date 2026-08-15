@@ -39,6 +39,16 @@ export type Business = {
   established?: number;
   /** Optional Urdu rendering of the trading name. */
   nameUrdu?: string;
+  /**
+   * Filename in clients/<id>/images/ for the hero photograph.
+   *
+   * Beauty is a visual trade — one good photograph of real work sells harder
+   * than any amount of copy. Omit it and the hero falls back to a typographic
+   * treatment, which is the correct state while waiting on a client's photos
+   * rather than a broken one.
+   */
+  heroImage?: string;
+  heroAlt?: string;
 };
 
 export type Contact = {
