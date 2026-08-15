@@ -1,11 +1,17 @@
 ---
+import { Picture } from 'astro:assets';
 import type { ClientSite } from '../lib/schema';
+import { clientImage } from '../lib/images';
 
 interface Props {
   client: ClientSite;
 }
 const { client } = Astro.props;
-const { gallery } = client;
+const { gallery, id } = client;
+
+// Tiles are 3:4 in a two-column grid. At 470px column and 26px gutters the
+// widest a tile ever renders is ~215 CSS px, so 2x covers every phone.
+const WIDTHS = [220, 440];
 ---
 
 {
@@ -15,22 +21,29 @@ const { gallery } = client;
       <h2 class="h2">Recent work</h2>
 
       <div class="gallery">
-        {gallery.map((t, i) => (
-          <figure class={t.image ? 'tile' : 'tile tile--ph'}>
-            {t.image && (
-              <img
-                src={t.image}
-                alt={t.alt ?? t.label}
-                /* First row is above the fold on most phones; the rest waits. */
-                loading={i < 2 ? 'eager' : 'lazy'}
-                decoding="async"
-                width="240"
-                height="320"
-              />
-            )}
-            <figcaption><span>{t.label}</span></figcaption>
-          </figure>
-        ))}
+        {gallery.map((t, i) => {
+          const img = clientImage(id, t.image);
+          return (
+            <figure class={img ? 'tile' : 'tile tile--ph'}>
+              {img && (
+                <Picture
+                  src={img}
+                  formats={['avif', 'webp']}
+                  fallbackFormat="jpeg"
+                  widths={WIDTHS}
+                  sizes="(max-width: 470px) 50vw, 220px"
+                  alt={t.alt ?? t.label}
+                  /* First row is above the fold on most phones; the rest waits. */
+                  loading={i < 2 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+              )}
+              <figcaption>
+                <span>{t.label}</span>
+              </figcaption>
+            </figure>
+          );
+        })}
       </div>
     </section>
   )

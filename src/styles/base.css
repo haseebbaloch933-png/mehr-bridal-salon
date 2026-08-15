@@ -146,7 +146,12 @@ textarea {
 .urdu {
   font-family: var(--font-urdu);
   font-size: 1.3em;
-  line-height: 2.1;
+  /* 2.6, measured not guessed. Nastaliq descends far below the baseline and
+   * cascades each word diagonally downward, so the ink of a single line is
+   * roughly twice the height of the equivalent Latin. At 2.1 the tails of
+   * برائیڈل were being clipped by the line box; 2.4 was the first value that
+   * cleared and 2.6 leaves margin for deeper strings. */
+  line-height: 2.6;
   direction: rtl;
   unicode-bidi: isolate;
 }

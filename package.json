@@ -10,6 +10,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "new-client": "node scripts/new-client.mjs",
+    "fonts": "node scripts/fetch-fonts.mjs",
     "weight": "node scripts/check-weight.mjs"
   },
   "dependencies": {

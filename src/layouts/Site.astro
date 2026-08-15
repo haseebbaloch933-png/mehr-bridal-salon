@@ -1,6 +1,7 @@
 ---
 import type { ClientSite } from '../lib/schema';
 import { intlPhone, mapsHref } from '../lib/format';
+import '../styles/fonts.css';
 import '../styles/base.css';
 
 interface Props {
@@ -60,6 +61,15 @@ const jsonLd = {
     <meta property="og:description" content={seo.description} />
     {canonical && <meta property="og:url" content={canonical} />}
     <meta name="theme-color" content="#171018" />
+
+    {/*
+      Preload only the two faces the hero needs before first paint: the display
+      face draws the wordmark, the body face everything under it. The 600 weight
+      and the Nastaliq face appear further down the page and can arrive late —
+      preloading all four would have them compete with the ones that matter.
+    */}
+    <link rel="preload" href="/fonts/cormorant-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/jost-400.woff2" as="font" type="font/woff2" crossorigin />
 
     <!-- Skin is chosen by the client file. One line, whole new trade. -->
     {business.skin === 'salon' && <style set:html={await import('../skins/salon.css?raw').then((m) => m.default)} />}

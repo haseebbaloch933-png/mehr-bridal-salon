@@ -1,20 +1,35 @@
 /**
  * Page weight guard.
  *
- * Islamabad runs 68 Mbps fixed and 8-12ms latency on Nayatel fiber, so the
- * budget is generous compared with the national picture — but customers also
- * browse on mobile data around the city, and page weight is the one thing that
- * silently rots as clients send more photos. Failing the build is the only
+ * Islamabad has fiber (68 Mbps, 8-12 ms) so the budget is generous compared
+ * with the national picture — but page weight is the one thing that silently
+ * rots as clients send more photos, and failing the build is the only
  * enforcement that survives a busy week.
+ *
+ * MEASURING TRANSFER, NOT DISK
+ * ----------------------------
+ * A naive sum of dist/ is wrong and actively harmful: responsive images emit
+ * AVIF + WebP + JPEG at several widths each, but a browser downloads exactly
+ * ONE of those per image. Summing them all triple-counts and fails the build
+ * for doing the right thing.
+ *
+ * So per source image we count the best format at its largest width — the
+ * honest worst case for a modern phone. Text assets are counted gzipped,
+ * because that is how the server sends them.
  */
 
 import { readdir, stat, readFile } from 'node:fs/promises';
-import { join, extname } from 'node:path';
+import { join, extname, basename } from 'node:path';
 import { gzipSync } from 'node:zlib';
 
 const DIST = 'dist';
-const LIMIT_KB = 400; // total per page, transferred
+const LIMIT_KB = 400; // realistic transfer for one visit
 const HTML_LIMIT_KB = 80; // gzipped HTML alone
+
+const IMAGE_EXT = new Set(['.avif', '.webp', '.jpeg', '.jpg', '.png', '.gif', '.svg']);
+const TEXT_EXT = new Set(['.html', '.css', '.js', '.json', '.xml', '.txt', '.svg']);
+/* Format preference must match what a current mobile browser picks. */
+const FORMAT_RANK = { '.avif': 0, '.webp': 1, '.jpeg': 2, '.jpg': 2, '.png': 3, '.gif': 4 };
 
 const kb = (bytes) => Math.round((bytes / 1024) * 10) / 10;
 
@@ -35,40 +50,86 @@ async function walk(dir) {
 }
 
 const files = await walk(DIST);
-
 if (files.length === 0) {
   console.error('✗ nothing in dist/ — did the build run?');
   process.exit(1);
 }
 
-let total = 0;
-const byType = new Map();
+/*
+ * Astro names variants `<source>.<contentHash>_<variantHash>.<ext>`. Everything
+ * before the first dot identifies the original photo.
+ */
+const imageGroups = new Map(); // source name -> ext -> largest bytes
+let textBytes = 0;
+let fontBytes = 0;
 let htmlGz = 0;
+const textDetail = new Map();
 
 for (const f of files) {
+  const ext = extname(f).toLowerCase();
   const { size } = await stat(f);
-  total += size;
-  const ext = extname(f) || 'other';
-  byType.set(ext, (byType.get(ext) ?? 0) + size);
 
-  if (ext === '.html') {
-    htmlGz += gzipSync(await readFile(f)).length;
+  if (ext === '.woff2' || ext === '.woff' || ext === '.ttf') {
+    fontBytes += size;
+    continue;
   }
+
+  if (IMAGE_EXT.has(ext) && ext !== '.svg') {
+    const source = basename(f).split('.')[0];
+    if (!imageGroups.has(source)) imageGroups.set(source, new Map());
+    const byExt = imageGroups.get(source);
+    // Largest width of this format = the 2x variant the phone actually picks.
+    byExt.set(ext, Math.max(byExt.get(ext) ?? 0, size));
+    continue;
+  }
+
+  if (TEXT_EXT.has(ext)) {
+    const gz = gzipSync(await readFile(f)).length;
+    textBytes += gz;
+    textDetail.set(ext, (textDetail.get(ext) ?? 0) + gz);
+    if (ext === '.html') htmlGz += gz;
+    continue;
+  }
+
+  textBytes += size;
 }
 
-console.log('\n  Page weight');
-console.log('  ───────────────────────────────');
-for (const [ext, size] of [...byType.entries()].sort((a, b) => b[1] - a[1])) {
-  console.log(`  ${ext.padEnd(8)} ${String(kb(size)).padStart(8)} KB`);
+/* Best format per image = the one a modern browser would take. */
+let imageBytes = 0;
+const imageRows = [];
+for (const [source, byExt] of imageGroups) {
+  const best = [...byExt.entries()].sort(
+    (a, b) => (FORMAT_RANK[a[0]] ?? 9) - (FORMAT_RANK[b[0]] ?? 9)
+  )[0];
+  if (!best) continue;
+  imageBytes += best[1];
+  imageRows.push([source, best[0], best[1]]);
 }
-console.log('  ───────────────────────────────');
-console.log(`  ${'total'.padEnd(8)} ${String(kb(total)).padStart(8)} KB   (limit ${LIMIT_KB})`);
-console.log(`  ${'html gz'.padEnd(8)} ${String(kb(htmlGz)).padStart(8)} KB   (limit ${HTML_LIMIT_KB})\n`);
+
+const total = textBytes + fontBytes + imageBytes;
+
+console.log('\n  Transferred weight — one visit, modern phone');
+console.log('  ─────────────────────────────────────────────');
+for (const [ext, size] of [...textDetail.entries()].sort((a, b) => b[1] - a[1])) {
+  console.log(`  ${(ext + ' (gz)').padEnd(14)} ${String(kb(size)).padStart(8)} KB`);
+}
+console.log(`  ${'fonts'.padEnd(14)} ${String(kb(fontBytes)).padStart(8)} KB`);
+console.log(
+  `  ${'images'.padEnd(14)} ${String(kb(imageBytes)).padStart(8)} KB   (${imageRows.length} photos, best format @2x)`
+);
+for (const [name, ext, size] of imageRows.sort((a, b) => b[2] - a[2]).slice(0, 6)) {
+  console.log(`    ${(name + ext).padEnd(28)} ${String(kb(size)).padStart(6)} KB`);
+}
+console.log('  ─────────────────────────────────────────────');
+console.log(`  ${'TOTAL'.padEnd(14)} ${String(kb(total)).padStart(8)} KB   (limit ${LIMIT_KB})`);
+console.log(`  ${'html gz'.padEnd(14)} ${String(kb(htmlGz)).padStart(8)} KB   (limit ${HTML_LIMIT_KB})\n`);
 
 let failed = false;
 
 if (kb(total) > LIMIT_KB) {
-  console.error(`✗ over budget by ${kb(total) - LIMIT_KB} KB — compress the photos before shipping`);
+  console.error(
+    `✗ over budget by ${Math.round(kb(total) - LIMIT_KB)} KB — the photos are the usual cause`
+  );
   failed = true;
 }
 

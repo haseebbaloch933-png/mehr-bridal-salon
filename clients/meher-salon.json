@@ -122,10 +122,10 @@
   },
 
   "gallery": [
-    { "label": "Barat" },
-    { "label": "Mehndi" },
-    { "label": "Walima" },
-    { "label": "Engagement" }
+    { "label": "Barat", "image": "barat-01.jpg", "alt": "Barat bridal makeup and hair" },
+    { "label": "Mehndi", "image": "mehndi-01.jpg", "alt": "Mehndi day styling" },
+    { "label": "Walima", "image": "walima-01.jpg", "alt": "Walima bridal look" },
+    { "label": "Engagement", "image": "engagement-01.jpg", "alt": "Engagement makeup" }
   ],
 
   "reviews": [
