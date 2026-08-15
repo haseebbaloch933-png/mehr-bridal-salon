@@ -11,27 +11,19 @@
  */
 
 @font-face {
-  font-family: "Cormorant Garamond";
+  font-family: "Fraunces";
   font-style: normal;
-  font-weight: 400;
+  font-weight: 500;
   font-display: swap;
-  src: url("/fonts/cormorant-400.woff2") format("woff2");
+  src: url("/fonts/fraunces-500.woff2") format("woff2");
 }
 
 @font-face {
-  font-family: "Jost";
+  font-family: "DM Sans";
   font-style: normal;
-  font-weight: 400;
+  font-weight: 400 600;
   font-display: swap;
-  src: url("/fonts/jost-400.woff2") format("woff2");
-}
-
-@font-face {
-  font-family: "Jost";
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("/fonts/jost-600.woff2") format("woff2");
+  src: url("/fonts/dmsans-var.woff2") format("woff2");
 }
 
 @font-face {

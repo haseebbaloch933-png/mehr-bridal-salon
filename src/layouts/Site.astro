@@ -14,6 +14,18 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : un
 const mapQuery = location.mapQuery ?? `${location.addressLine}, ${location.city}`;
 
 /*
+ * Skin lookup. Eager glob because Vite needs a literal pattern — it cannot
+ * resolve `../skins/${skin}.css` from a variable. Unused skins are tree-shaken.
+ */
+const skins = import.meta.glob('../skins/*.css', { query: '?raw', import: 'default', eager: true });
+const skinCss = skins[`../skins/${business.skin}.css`] as string | undefined;
+if (!skinCss) {
+  throw new Error(
+    `No stylesheet for skin "${business.skin}". Expected src/skins/${business.skin}.css`
+  );
+}
+
+/*
  * Schema.org LocalBusiness.
  *
  * This is the cheapest line of code in the project and one of the highest
@@ -68,11 +80,15 @@ const jsonLd = {
       and the Nastaliq face appear further down the page and can arrive late —
       preloading all four would have them compete with the ones that matter.
     */}
-    <link rel="preload" href="/fonts/cormorant-400.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/jost-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/fraunces-500.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/dmsans-var.woff2" as="font" type="font/woff2" crossorigin />
 
-    <!-- Skin is chosen by the client file. One line, whole new trade. -->
-    {business.skin === 'salon' && <style set:html={await import('../skins/salon.css?raw').then((m) => m.default)} />}
+    {/*
+      Skin is chosen by the client file. Inlined rather than linked: at these
+      sizes an extra request costs more than the bytes, and it removes a
+      render-blocking round trip on the critical path.
+    */}
+    <style set:html={skinCss} />
 
     <script is:inline set:html={JSON.stringify(jsonLd)} type="application/ld+json" />
 

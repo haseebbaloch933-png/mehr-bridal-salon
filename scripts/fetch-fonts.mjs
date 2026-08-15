@@ -43,18 +43,36 @@ const UI_URDU = ['اپوائنٹمنٹ', 'پتہ'];
  */
 const LATIN = [
   {
-    id: 'cormorant',
-    family: 'Cormorant Garamond',
-    // Display face: wordmark, headings, prices. All set at 400.
-    query: 'Cormorant+Garamond:wght@400',
-    weights: ['400'],
+    id: 'fraunces',
+    family: 'Fraunces',
+    /*
+     * Display face: wordmark, headings, prices.
+     *
+     * Chosen over Cormorant Garamond, which is *the* wedding font — a bride
+     * who has looked at three other salons has already seen it, and it reads
+     * as a template. Fraunces has optical sizing and a softness that sits
+     * better against skin and fabric. Requesting the static 500 weight rather
+     * than the variable font: the full variable file carries SOFT and WONK
+     * axes we barely touch, at several times the size.
+     */
+    query: 'Fraunces:opsz,wght@9..144,500',
+    weights: ['500'],
   },
   {
-    id: 'jost',
-    family: 'Jost',
-    // Body at 400, buttons and labels at 600.
-    query: 'Jost:wght@400;600',
-    weights: ['400', '600'],
+    id: 'dmsans',
+    family: 'DM Sans',
+    /*
+     * Body at 400, labels at 500, buttons at 600. Replaces Jost, which is
+     * geometric Futura-adjacent and runs cold — wrong temperature for a
+     * beauty brand.
+     *
+     * Variable, not three statics. Each static DM Sans weight is ~36 KB, so
+     * 400/500/600 as separate files costs 108 KB; the variable file covering
+     * the whole range is a fraction of that and lets the skin use any weight
+     * in between without another download.
+     */
+    query: 'DM+Sans:wght@400..600',
+    variable: '400 600',
   },
 ];
 
@@ -118,6 +136,22 @@ for (const font of LATIN) {
   // Google returns one @font-face block per (weight, unicode-range). Take the
   // latin block for each weight — identified by the U+0000-00FF range.
   const blocks = css.split('@font-face').slice(1);
+
+  /* Variable: one file covers the whole weight range. */
+  if (font.variable) {
+    const block = blocks.find((b) => b.includes('U+0000-00FF'));
+    const url = block && grabWoff2(block);
+    if (!url) {
+      console.warn(`  ! no latin block for ${font.family} (variable)`);
+      continue;
+    }
+    const file = `${font.id}-var.woff2`;
+    const size = await download(url, join(OUT_DIR, file));
+    totalBytes += size;
+    console.log(`  ${font.family} ${font.variable} (var)`.padEnd(34) + `${kb(size)} KB`);
+    faces.push({ family: font.family, weight: font.variable, file, display: 'swap' });
+    continue;
+  }
 
   for (const weight of font.weights) {
     const block = blocks.find(

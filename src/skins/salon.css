@@ -1,164 +1,195 @@
 /*
- * SALON SKIN — "bridal atelier"
+ * SALON SKIN — "warm atelier"
  *
- * Nine of the twenty-six leads are salons, and bridal is the highest-ticket
- * item in the whole product line (Rs 1,25,000 packages, booked 3–6 months out).
- * The customer is a Ghauri Town or Soan Gardens professional who already
- * follows premium brands on Instagram, so this skin has to hold its own against
- * those. A plain page here reads as a cheap business.
+ * This replaced a dark plum-and-gold design after checking it against what
+ * premium beauty actually looks like in 2026. Three findings killed the old one:
  *
- * Direction: deep plum ground, ivory text, champagne gold used only as
- * hairlines, prices and the primary action. The gradient runs light-to-dark
- * across the wordmark so gold reads as brushed metal rather than flat yellow.
- * The moment gold touches body text it stops feeling expensive.
+ *  1. GlossGenius — the acknowledged design leader in this category — is light,
+ *     airy, sans-dominant, softly rounded and photography-heavy. Not one of
+ *     those things was true of gold-on-black.
+ *  2. 2026 bridal beauty is "soft refinement over heavy transformation":
+ *     expensive skin, monotone palettes, peach/rose/mauve undertones, glimmery
+ *     rather than glittery. A metallic gold gradient is the opposite of that.
+ *  3. Luxury bridal boutiques use warm neutrals specifically so the *dress*
+ *     stays the focal point. A Pakistani bride's lehenga is red, maroon or
+ *     emerald with heavy gold work — a dark gold-trimmed page fights those
+ *     photographs. An ivory frame lets them carry the page.
+ *
+ * Gold-on-black is also the single most overused shorthand for "premium". It
+ * signals jewellery shop or whisky brand, not beauty.
+ *
+ * Direction: warm ivory ground, cocoa-plum ink, muted rose accent, bronze only
+ * as a hairline. Soft radii throughout, generous air, photography-forward.
  */
 
 :root {
-  /* ground */
-  --bg: #171018;
-  --surface: #1f1621;
-  --surface-2: rgba(255, 255, 255, 0.03);
-  --card: linear-gradient(165deg, #241a28, #1c1420);
-  --bar-bg: rgba(23, 16, 24, 0.96);
+  /* ground — warm, never pure white; pure white reads clinical next to skin tones */
+  --bg: #fbf7f3;
+  --surface: #ffffff;
+  --surface-2: #f4ece5;
+  --card: #ffffff;
+  --bar-bg: rgba(251, 247, 243, 0.94);
 
-  /* ink */
-  --fg: #f6f0e9;
-  --fg-dim: #a2929c;
-  --fg-faint: #6e5f69;
+  /* ink — cocoa-plum rather than black. Black on ivory is harsh and cheapens it. */
+  --fg: #332529;
+  --fg-dim: #7c6b70;
+  --fg-faint: #a29397;
 
-  /* accent */
-  --accent: #d4a857;
-  --accent-lt: #ebd3a0;
-  --accent-dk: #8c6a28;
-  --accent-fill: linear-gradient(160deg, #ebd3a0, #d4a857);
-  --on-accent: #2a1c05;
-  --hairline: rgba(212, 168, 87, 0.22);
-  --rule: rgba(255, 255, 255, 0.05);
+  /* accent — muted rose. Desaturated enough to read grown-up rather than candy.
+   *
+   * Darkened from #a96b76 after measuring contrast: the lighter tone gave 3.9:1
+   * on the ivory ground and 4.16:1 behind white ribbon text, both under the 4.5
+   * needed for small text. Light palettes fail here far more often than dark
+   * ones, and a rose that only works at 24px is not usable for 11px labels.
+   * #95585f measures 5.13 on ivory, 5.47 on white, 5.47 for white on it. */
+  --accent: #95585f;
+  --accent-lt: #c68f98;
+  --accent-dk: #7f434b;
+  --accent-fill: linear-gradient(165deg, #9d6069, #8a4d55);
+  --accent-soft: #f6ebeb;
+  --on-accent: #ffffff;
 
-  /* whatsapp — reserved */
+  /* bronze — hairlines and tiny marks only. Never a fill, never type.
+   * Also darkened: #b08d57 was 3.09:1 against white. */
+  --bronze: #8c6a38;
+
+  --hairline: #e7dbd2;
+  --rule: #f0e7e0;
+
+  /* whatsapp — reserved, appears nowhere else */
   --wa: #25d366;
   --on-wa: #04240f;
 
-  /* type */
-  --font-display: "Cormorant Garamond", "Hoefler Text", Baskerville,
-    "Palatino Linotype", Palatino, Georgia, serif;
-  --font-body: "Jost", -apple-system, "Segoe UI", Roboto, system-ui, sans-serif;
-  --font-ui: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  /* type
+   * Fraunces over Cormorant Garamond: Cormorant is *the* wedding font and
+   * reads as a template the moment a bride has seen three other salons use it.
+   * Fraunces has optical sizing and a softness that suits skin and fabric.
+   * DM Sans over Jost: Jost is geometric Futura-adjacent and runs cold. */
+  --font-display: "Fraunces", "Hoefler Text", Baskerville, Georgia, serif;
+  --font-body: "DM Sans", -apple-system, "Segoe UI", Roboto, system-ui, sans-serif;
+  --font-ui: "DM Sans", -apple-system, "Segoe UI", system-ui, sans-serif;
   --font-urdu: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", serif;
 
-  --fw-display: 400;
-  --ls-display: 0.01em;
+  --fw-display: 500;
+  --ls-display: -0.015em;
   --fs-body: 16px;
-  --fs-h2: 29px;
+  --fs-h2: 31px;
 
-  /* metrics */
+  /* metrics — soft radii are doing real work here. 2px corners read technical;
+   * 16px reads like a beauty product. */
   --col: 470px;
-  --gutter: 26px;
-  --gap-section: 44px;
-  --radius: 2px;
+  --gutter: 24px;
+  --gap-section: 52px;
+  --radius: 16px;
+  --radius-pill: 999px;
 
-  --shadow-accent: 0 6px 26px -10px rgba(212, 168, 87, 0.75);
-  --shadow-wa: 0 8px 30px -12px rgba(37, 211, 102, 0.7);
+  --shadow-soft: 0 1px 2px rgba(51, 37, 41, 0.04), 0 10px 30px -18px rgba(51, 37, 41, 0.22);
+  --shadow-accent: 0 10px 26px -14px rgba(169, 107, 118, 0.7);
+  --shadow-wa: 0 10px 26px -14px rgba(37, 211, 102, 0.6);
 }
 
 /* ---- hero -------------------------------------------------------- */
 
 .hero {
-  padding: 46px var(--gutter) 38px;
+  padding: 44px var(--gutter) 40px;
   text-align: center;
-  background: radial-gradient(120% 80% at 50% -10%, rgba(212, 168, 87, 0.16), transparent 60%),
-    linear-gradient(180deg, #1e1520, #171018);
+  background:
+    radial-gradient(120% 70% at 50% 0%, #fdf6f4 0%, transparent 62%),
+    linear-gradient(180deg, #fbf7f3, #f8f1ec);
 }
 
 .hero__crest {
-  margin: 0 auto 20px;
-  width: 44px;
-  height: 44px;
+  margin: 0 auto 18px;
+  width: 40px;
+  height: 40px;
+  color: var(--accent);
 }
 
 .hero__name {
   font-family: var(--font-display);
-  font-size: 44px;
-  line-height: 1;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  font-weight: 400;
-  background: linear-gradient(160deg, var(--accent-lt) 5%, var(--accent) 45%, var(--accent-dk) 95%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  font-size: 52px;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  font-weight: 500;
+  color: var(--fg);
+  font-variation-settings: "SOFT" 40, "WONK" 1;
 }
 
 .hero__kicker {
-  margin-top: 12px;
-  font-family: var(--font-ui);
-  font-size: 10px;
-  letter-spacing: 0.34em;
+  margin-top: 14px;
+  font-size: 11px;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
-  color: var(--fg-dim);
+  color: var(--accent);
+  font-weight: 500;
 }
 
-/* Hairline with a centre diamond. Costs nothing, reads as considered. */
+/* A single hairline with a small bronze dot. Restraint is the luxury signal;
+ * the old version's gradient rule with a diamond was doing too much. */
 .rule {
   display: flex;
   align-items: center;
-  gap: 11px;
-  margin: 20px auto 0;
-  max-width: 230px;
+  gap: 10px;
+  margin: 22px auto 0;
+  max-width: 160px;
 }
 
 .rule i {
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  background: var(--hairline);
 }
 
 .rule b {
-  width: 4px;
-  height: 4px;
-  background: var(--accent);
-  transform: rotate(45deg);
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--bronze);
   flex: none;
 }
 
 .hero__tagline {
   margin-top: 20px;
   font-family: var(--font-display);
-  font-size: 20px;
-  line-height: 1.45;
-  font-style: italic;
+  font-size: 21px;
+  line-height: 1.4;
 }
 
 .hero__place {
-  margin-top: 9px;
-  font-size: 14px;
+  margin-top: 10px;
+  font-size: 14.5px;
   color: var(--fg-dim);
 }
 
 .rating {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 9px;
+  gap: 8px;
   margin-top: 20px;
   font-size: 13.5px;
   color: var(--fg-dim);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  padding: 8px 16px;
+  box-shadow: var(--shadow-soft);
 }
 
 .rating__stars {
-  color: var(--accent);
-  letter-spacing: 0.12em;
+  color: var(--bronze);
+  letter-spacing: 0.1em;
 }
 
 .rating b {
   color: var(--fg);
   font-variant-numeric: tabular-nums;
+  font-weight: 600;
 }
 
 .hero__cta {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 11px;
+  gap: 10px;
   margin-top: 26px;
 }
 
@@ -173,85 +204,90 @@
 }
 
 .trust span {
-  font-family: var(--font-ui);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--accent);
-  border: 1px solid var(--hairline);
-  padding: 6px 11px;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--accent-dk);
+  background: var(--accent-soft);
+  border-radius: var(--radius-pill);
+  padding: 7px 14px;
+  font-weight: 500;
 }
 
 /* ---- packages ---------------------------------------------------- */
 
 .cards {
   display: grid;
-  gap: 15px;
-  margin-top: 28px;
+  gap: 14px;
+  margin-top: 30px;
 }
 
 .card {
   border: 1px solid var(--hairline);
   background: var(--card);
-  padding: 24px 22px;
+  border-radius: var(--radius);
+  padding: 26px 22px 22px;
   position: relative;
+  box-shadow: var(--shadow-soft);
 }
 
 .card--featured {
-  border-color: rgba(212, 168, 87, 0.5);
-  box-shadow: inset 0 0 0 1px rgba(212, 168, 87, 0.12), 0 18px 50px -30px rgba(212, 168, 87, 0.6);
+  border-color: var(--accent-lt);
+  background: linear-gradient(180deg, #fdf7f7, #ffffff 34%);
 }
 
 .card__ribbon {
   position: absolute;
   top: 0;
-  right: 22px;
+  left: 22px;
   transform: translateY(-50%);
-  background: var(--accent-fill);
+  background: var(--accent);
   color: var(--on-accent);
-  font-family: var(--font-ui);
-  font-size: 9px;
-  letter-spacing: 0.16em;
+  font-size: 10px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  font-weight: 700;
-  padding: 4px 10px;
+  font-weight: 600;
+  padding: 6px 13px;
+  border-radius: var(--radius-pill);
 }
 
 .card h3 {
   font-family: var(--font-display);
-  font-size: 24px;
-  font-weight: 400;
-  letter-spacing: 0.02em;
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 
 .card__urdu {
   font-size: 14px;
   color: var(--fg-dim);
-  margin-top: 2px;
+  margin-top: 0;
 }
 
 .card__price {
   display: flex;
   align-items: baseline;
-  gap: 7px;
-  margin-top: 16px;
-  padding-bottom: 16px;
+  gap: 6px;
+  margin-top: 14px;
+  padding-bottom: 18px;
   border-bottom: 1px solid var(--rule);
 }
 
 .card__cur {
-  font-family: var(--font-ui);
-  font-size: 12.5px;
-  letter-spacing: 0.14em;
-  color: var(--accent);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--fg-dim);
+  font-weight: 500;
 }
 
 .card__amt {
   font-family: var(--font-display);
-  font-size: 38px;
+  font-size: 40px;
   line-height: 1;
   color: var(--fg);
   font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  font-weight: 500;
 }
 
 .card__unit {
@@ -261,25 +297,28 @@
 
 .card ul {
   list-style: none;
-  margin-top: 16px;
+  margin-top: 18px;
   display: grid;
-  gap: 9px;
+  gap: 11px;
 }
 
 .card li {
   font-size: 14.5px;
   color: var(--fg-dim);
   display: flex;
-  gap: 10px;
+  gap: 11px;
   line-height: 1.5;
 }
 
+/* A soft dot, not a gold diamond. */
 .card li i {
-  color: var(--accent);
-  font-style: normal;
-  font-size: 11px;
-  margin-top: 4px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-lt);
   flex: none;
+  margin-top: 8px;
+  font-size: 0;
 }
 
 .card__cta {
@@ -287,46 +326,46 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-top: 20px;
+  margin-top: 22px;
   border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
   padding: 14px;
   font-size: 14.5px;
   font-weight: 600;
-  transition: background 0.2s ease, border-color 0.2s ease;
+  color: var(--fg);
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .card__cta:hover {
-  background: rgba(212, 168, 87, 0.08);
-  border-color: var(--accent);
+  background: var(--accent-soft);
+  border-color: var(--accent-lt);
+  color: var(--accent-dk);
 }
 
 .card--featured .card__cta {
   background: var(--accent-fill);
   color: var(--on-accent);
   border-color: transparent;
-  font-weight: 700;
+  box-shadow: var(--shadow-accent);
 }
 
-/* ---- price menu --------------------------------------------------
- * Dotted leaders, borrowed from a printed restaurant menu. It is the detail
- * that makes a price list feel composed rather than dumped on the page.
- */
+/* ---- price menu -------------------------------------------------- */
 
 .menu {
-  margin-top: 26px;
+  margin-top: 28px;
 }
 
 .menu__group + .menu__group {
-  margin-top: 26px;
+  margin-top: 30px;
 }
 
 .menu__heading {
-  font-family: var(--font-ui);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--accent);
-  padding-bottom: 9px;
+  font-weight: 600;
+  padding-bottom: 10px;
   border-bottom: 1px solid var(--hairline);
 }
 
@@ -334,38 +373,46 @@
   display: flex;
   align-items: baseline;
   gap: 10px;
-  padding: 13px 0;
+  padding: 15px 0;
   border-bottom: 1px solid var(--rule);
+  transition: color 0.15s ease;
 }
 
 .menu__row:last-child {
   border-bottom: none;
 }
 
+.menu__row:hover .menu__price {
+  color: var(--accent-dk);
+}
+
 .menu__name {
   font-size: 15.5px;
   flex: 1;
+  font-weight: 500;
 }
 
 .menu__name small {
   display: block;
   color: var(--fg-dim);
   font-size: 12.5px;
-  margin-top: 2px;
+  margin-top: 3px;
+  font-weight: 400;
 }
 
 .menu__dots {
   flex: 1;
   min-width: 14px;
-  border-bottom: 1px dotted rgba(255, 255, 255, 0.16);
+  border-bottom: 1px dotted var(--hairline);
   transform: translateY(-4px);
 }
 
 .menu__price {
   font-family: var(--font-display);
-  font-size: 19px;
+  font-size: 20px;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
+  font-weight: 500;
   flex: none;
 }
 
@@ -374,35 +421,41 @@
 .form {
   display: grid;
   gap: 14px;
-  margin-top: 26px;
+  margin-top: 28px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow-soft);
 }
 
 .field label {
   display: block;
-  font-family: var(--font-ui);
-  font-size: 11px;
-  letter-spacing: 0.06em;
+  font-size: 12px;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--fg-dim);
-  margin-bottom: 7px;
+  margin-bottom: 8px;
+  font-weight: 600;
 }
 
 .field input,
 .field select {
   width: 100%;
-  background: var(--surface-2);
+  background: var(--bg);
   border: 1px solid var(--hairline);
-  border-radius: var(--radius);
+  border-radius: 12px;
   color: var(--fg);
   padding: 15px 14px;
   /* 16px minimum or iOS Safari zooms the viewport on focus. */
   font-size: 16px;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
 
 .field input:focus,
 .field select:focus {
-  border-color: var(--accent);
+  border-color: var(--accent-lt);
+  background: var(--surface);
 }
 
 .field input::placeholder {
@@ -415,23 +468,28 @@
   text-align: center;
 }
 
-/* ---- gallery ----------------------------------------------------- */
+/* ---- gallery -----------------------------------------------------
+ * Beauty is a visual trade and the work is the product. This grid gets more
+ * room than it did in the dark version, and the tiles no longer sit under a
+ * gold wash that tinted every photograph.
+ */
 
 .gallery {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  margin-top: 26px;
+  margin-top: 28px;
 }
 
 .tile {
   aspect-ratio: 3 / 4;
-  border: 1px solid var(--hairline);
+  border-radius: 14px;
   position: relative;
   overflow: hidden;
   display: flex;
   align-items: flex-end;
-  padding: 13px;
+  padding: 12px;
+  background: var(--surface-2);
 }
 
 .tile img {
@@ -442,18 +500,30 @@
   object-fit: cover;
 }
 
-.tile span {
+.tile figcaption {
   position: relative;
   z-index: 1;
-  font-family: var(--font-ui);
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
 }
 
-/* Placeholder tones for clients who have not sent photos yet. Building the
- * site before asking for content is deliberate: people edit far more readily
- * than they supply. */
+.tile span {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  font-weight: 600;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* Only a bottom scrim so the label stays readable — no colour cast over the
+ * photograph itself. */
+.tile::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 45%;
+  background: linear-gradient(180deg, transparent, rgba(40, 24, 28, 0.55));
+}
+
 .tile--ph::before {
   content: "";
   position: absolute;
@@ -461,61 +531,60 @@
 }
 
 .tile--ph:nth-child(4n + 1)::before {
-  background: linear-gradient(150deg, #4a3348, #20161f);
+  background: linear-gradient(150deg, #e8d5d3, #cbb2b4);
 }
 .tile--ph:nth-child(4n + 2)::before {
-  background: linear-gradient(150deg, #4b3a2a, #20161f);
+  background: linear-gradient(150deg, #ecdfd0, #cdb69c);
 }
 .tile--ph:nth-child(4n + 3)::before {
-  background: linear-gradient(150deg, #3b3350, #20161f);
+  background: linear-gradient(150deg, #e2d7dd, #b9a7b3);
 }
 .tile--ph:nth-child(4n)::before {
-  background: linear-gradient(150deg, #523641, #20161f);
-}
-
-.tile::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(90% 60% at 50% 0%, rgba(212, 168, 87, 0.18), transparent 70%);
+  background: linear-gradient(150deg, #eadcd6, #c6ada4);
 }
 
 /* ---- reviews ----------------------------------------------------- */
 
 .review {
-  border: 1px solid var(--hairline);
-  background: var(--card);
-  padding: 22px;
-  margin-top: 24px;
+  background: var(--accent-soft);
+  border-radius: var(--radius);
+  padding: 26px 24px;
+  margin-top: 26px;
   text-align: center;
 }
 
 .review__quote {
   font-family: var(--font-display);
-  font-size: 19px;
-  line-height: 1.55;
-  font-style: italic;
+  font-size: 20px;
+  line-height: 1.5;
+  color: var(--fg);
+  letter-spacing: -0.01em;
 }
 
 .review__who {
-  margin-top: 14px;
-  font-family: var(--font-ui);
-  font-size: 10.5px;
-  letter-spacing: 0.18em;
+  margin-top: 16px;
+  font-size: 11px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-dk);
+  font-weight: 600;
 }
 
 /* ---- find us ----------------------------------------------------- */
 
 .info {
-  margin-top: 24px;
+  margin-top: 26px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 6px 20px;
+  box-shadow: var(--shadow-soft);
 }
 
 .info__row {
   display: flex;
   gap: 16px;
-  padding: 14px 0;
+  padding: 16px 0;
   border-bottom: 1px solid var(--rule);
 }
 
@@ -524,14 +593,14 @@
 }
 
 .info__k {
-  font-family: var(--font-ui);
-  font-size: 10px;
-  letter-spacing: 0.16em;
+  font-size: 11px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent);
-  width: 70px;
+  width: 62px;
   flex: none;
-  padding-top: 3px;
+  padding-top: 4px;
+  font-weight: 600;
 }
 
 .info__v {
@@ -542,7 +611,7 @@
   display: block;
   color: var(--fg-dim);
   font-size: 13px;
-  margin-top: 2px;
+  margin-top: 3px;
 }
 
 .maplink {
@@ -550,20 +619,21 @@
   align-items: center;
   justify-content: center;
   gap: 9px;
-  margin-top: 20px;
+  margin-top: 16px;
   border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
   padding: 15px;
   font-size: 14.5px;
   font-weight: 600;
+  background: var(--surface);
 }
 
 /* ---- footer ------------------------------------------------------ */
 
 .foot {
-  padding: 30px var(--gutter) 34px;
+  padding: 34px var(--gutter) 38px;
   text-align: center;
   color: var(--fg-faint);
-  font-size: 12px;
-  font-family: var(--font-ui);
-  letter-spacing: 0.08em;
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
 }
