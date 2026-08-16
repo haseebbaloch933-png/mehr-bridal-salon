@@ -358,11 +358,44 @@
   padding: 24px 22px 20px;
   position: relative;
   box-shadow: var(--shadow-soft);
-  transition: box-shadow var(--t) var(--ease);
 }
 
 .card:hover {
   box-shadow: var(--shadow-lift);
+}
+
+/*
+ * The three package cards — including the featured "Complete Bridal" card —
+ * used to fade up as one flat block with the rest of #packages, since the
+ * section's own .reveal only ever fades the section itself. This is the
+ * page's one real decision point; it deserves to arrive as three considered
+ * options, not a slab. No JS change: reuses the .is-in class the section's
+ * existing IntersectionObserver already toggles (Site.astro).
+ *
+ * Nested secondary motion, so quieter than its parent: .reveal moves 14px
+ * over 380ms, this moves 10px over 300ms — an echo, not a competing move.
+ * Same curve as .reveal (cubic-bezier(0.2, 0.6, 0.3, 1)), copied as a
+ * literal since --ease is scoped to this skin and .reveal's curve lives in
+ * base.css, which can't see it.
+ */
+.cards .card {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 300ms cubic-bezier(0.2, 0.6, 0.3, 1),
+    transform 300ms cubic-bezier(0.2, 0.6, 0.3, 1), box-shadow var(--t) var(--ease);
+}
+
+.section.reveal.is-in .cards .card {
+  opacity: 1;
+  transform: none;
+}
+
+.cards .card:nth-child(2) {
+  transition-delay: 60ms;
+}
+
+.cards .card:nth-child(3) {
+  transition-delay: 120ms;
 }
 
 .card--featured {
@@ -463,7 +496,8 @@
   font-family: var(--font-display);
   font-size: 14px;
   color: var(--fg);
-  transition: background var(--t) var(--ease), border-color var(--t) var(--ease);
+  transition: background var(--t) var(--ease), border-color var(--t) var(--ease),
+    transform 160ms var(--ease);
 }
 
 .card__cta:hover {
@@ -502,7 +536,7 @@
   gap: 10px;
   padding: 14px 0;
   border-bottom: 1px solid var(--rule);
-  transition: color var(--t) var(--ease);
+  transition: color var(--t) var(--ease), transform 160ms var(--ease);
 }
 
 .menu__row:last-child {
@@ -776,6 +810,36 @@
   font-family: var(--font-display);
   font-size: 14px;
   background: var(--bg);
+  transition: transform 160ms var(--ease);
+}
+
+/*
+ * Press feedback for every <a> styled as a button. .card__cta, .menu__row
+ * and .maplink each only had a HOVER transition, which never fires on the
+ * touch devices this site is built for — a tap on the highest-intent action
+ * on the page (the featured package's WhatsApp link) confirmed nothing
+ * before the OS handed off. One shared rule, since it's one defect.
+ *
+ * scale(0.98), not the more common 0.97: these are quiet outline/pill links
+ * on a warm cream ground, and 0.98 sits better with this skin's own
+ * restrained-glow register. 160ms + var(--ease): the repo's own curve,
+ * reused rather than introducing a second one for a three-line fix.
+ */
+.card__cta:active,
+.menu__row:active,
+.maplink:active {
+  transform: scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Not full removal: a 2% press-scale confirms a tap registered, it isn't
+   * the disorienting spatial motion reduced-motion targets. Keep the
+   * feedback, drop only its easing so it registers instantly. */
+  .card__cta:active,
+  .menu__row:active,
+  .maplink:active {
+    transition: none;
+  }
 }
 
 /* ---- footer -------------------------------------------------------- */

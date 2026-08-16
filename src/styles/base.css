@@ -264,6 +264,17 @@ textarea {
     transform: none;
     transition: none;
   }
+
+  /* salon-organic's package-card stagger is a .reveal-family entrance
+   * (see src/skins/salon-organic.css, .cards .card) — its reduced-motion
+   * handling lives here, next to the parent it echoes, not duplicated
+   * per-skin. */
+  .cards .card {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    transition-delay: 0ms;
+  }
 }
 
 .no-js .reveal {
