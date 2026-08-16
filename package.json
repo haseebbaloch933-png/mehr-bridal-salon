@@ -11,7 +11,8 @@
     "check": "astro check",
     "new-client": "node scripts/new-client.mjs",
     "fonts": "node scripts/fetch-fonts.mjs",
-    "weight": "node scripts/check-weight.mjs"
+    "weight": "node scripts/check-weight.mjs",
+    "check-tile-contrast": "node scripts/check-tile-contrast.mjs"
   },
   "dependencies": {
     "astro": "^5.14.1",
