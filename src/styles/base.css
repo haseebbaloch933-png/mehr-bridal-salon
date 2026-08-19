@@ -323,6 +323,8 @@ textarea {
   }
 
   .page {
+    max-width: var(--col);
+    margin-inline: auto;
     margin-block: 56px;
     border-radius: calc(var(--radius) * 1.4);
     overflow: hidden;
