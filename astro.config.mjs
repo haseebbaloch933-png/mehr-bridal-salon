@@ -9,7 +9,8 @@ export default defineConfig({
   output: 'static',
 
   // Set per client at build time so canonical URLs and Schema.org are right.
-  site: process.env.SITE_URL || 'https://example.pk',
+  site: process.env.SITE_URL || 'https://haseebbaloch933-png.github.io',
+  base: process.env.BASE_PATH || '/mehr-bridal-salon',
 
   server: {
     // Astro ignores the PORT env var by default and always binds 4321, so a
