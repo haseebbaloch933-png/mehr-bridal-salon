@@ -61,7 +61,7 @@ const askDate = booking?.askDate ?? true;
       */}
       <script
         is:inline
-        define:vars={{ phone, businessName: business.name, askDate }}
+        define:vars={{ phone, businessName: business.name, askDate, sheetUrl: booking?.sheetUrl ?? '' }}
       >
         (function () {
           var btn = document.getElementById('bk-send');
@@ -71,6 +71,25 @@ const askDate = booking?.askDate ?? true;
             var service = (document.getElementById('bk-service') || {}).value || '';
             var dateEl = document.getElementById('bk-date');
             var date = dateEl && dateEl.value ? dateEl.value : 'to be confirmed';
+
+            if (sheetUrl) {
+              var payload = {
+                name: name.trim() || '—',
+                service: service,
+                date: date,
+                business: businessName,
+                timestamp: new Date().toISOString()
+              };
+              try {
+                navigator.sendBeacon(sheetUrl, JSON.stringify(payload));
+              } catch (e) {
+                fetch(sheetUrl, {
+                  method: 'POST',
+                  mode: 'no-cors',
+                  body: JSON.stringify(payload)
+                }).catch(function () {});
+              }
+            }
 
             var lines = [
               'Assalam o alaikum!',

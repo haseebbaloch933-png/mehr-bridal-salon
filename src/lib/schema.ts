@@ -148,6 +148,8 @@ export type Booking = {
   askDate?: boolean;
   /** Overrides the default heading. */
   heading?: string;
+  /** Google Apps Script web-app URL. When set, bookings are logged to a Sheet. */
+  sheetUrl?: string;
 };
 
 export type GalleryTile = {

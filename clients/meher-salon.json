@@ -113,6 +113,7 @@
     "enabled": true,
     "askDate": true,
     "heading": "Reserve your seat",
+    "sheetUrl": "https://script.google.com/macros/s/AKfycbwBxdQD2v1nUZaNMtBiqTyXawr_WxshbK1ovxIbFUhzrdxKPeYjQB_Lhy9dXX3yX9sq/exec",
     "serviceOptions": [
       "Complete Bridal — PKR 1,25,000",
       "Nikkah package — PKR 45,000",
