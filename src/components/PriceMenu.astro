@@ -2,6 +2,7 @@
 import type { ClientSite } from '../lib/schema';
 import { pkr } from '../lib/format';
 import { waLink, menuItemMessage } from '../lib/whatsapp';
+import SectionRule from './SectionRule.astro';
 
 interface Props {
   client: ClientSite;
@@ -25,6 +26,7 @@ const urdu = menuHeading?.ur;
     <section class="section reveal" id="prices">
       <p class="eyebrow">{urdu ? <>{heading} · <span class="urdu">{urdu}</span></> : heading}</p>
       <h2 class="h2">Everything, with prices</h2>
+      <SectionRule />
       <p class="sub">No need to call and ask. Tap any item to book it on WhatsApp.</p>
 
       <div class="menu">

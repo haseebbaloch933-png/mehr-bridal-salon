@@ -18,6 +18,16 @@ import type { ImageMetadata } from 'astro';
  * Eager glob so lookups are synchronous during render. Astro needs the literal
  * pattern here — it cannot be built from a variable — so every client's images
  * are enumerated and the unused ones are tree-shaken out of the build.
+ *
+ * Tree-shaken by reference, not by directory: this glob still matches every
+ * client's images/ folder on disk, but only entries actually read through
+ * `files[key]` below make it into a given build's output. A root-relative
+ * literal path is required here — routing this through a Vite `resolve.alias`
+ * to pre-scope it to one client was tried and reverted, because it stopped
+ * Astro's asset pipeline recognising the import as a local image: Picture
+ * silently fell back to serving the untouched source file instead of
+ * sharp-generated AVIF/WebP variants. See check-weight.mjs for how build
+ * output is still kept honest per-client despite the shared glob.
  */
 const files = import.meta.glob<{ default: ImageMetadata }>(
   '/clients/**/images/*.{jpg,jpeg,png,webp,avif}',

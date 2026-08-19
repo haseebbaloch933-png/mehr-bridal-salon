@@ -11,6 +11,17 @@ export default defineConfig({
   // Set per client at build time so canonical URLs and Schema.org are right.
   site: process.env.SITE_URL || 'https://example.pk',
 
+  server: {
+    // Astro ignores the PORT env var by default and always binds 4321, so a
+    // launcher that assigns a free port via autoPort has no way to steer it.
+    // Reading PORT here is what makes that assignment actually take effect.
+    port: process.env.PORT ? Number(process.env.PORT) : 4321,
+    // Default is loopback-only, so a phone on the same Wi-Fi can't reach the
+    // dev server even with the right IP — needed for real-device checks.
+    // Trade-off: this also opens the port to anyone else on that network.
+    host: true,
+  },
+
   build: {
     // One CSS file inlined into the HTML rather than a separate request.
     // At our page sizes the extra round trip costs more than the bytes.

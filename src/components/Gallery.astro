@@ -2,6 +2,7 @@
 import { Picture } from 'astro:assets';
 import type { ClientSite } from '../lib/schema';
 import { clientImage } from '../lib/images';
+import SectionRule from './SectionRule.astro';
 
 interface Props {
   client: ClientSite;
@@ -19,6 +20,7 @@ const WIDTHS = [220, 440];
     <section class="section reveal" id="work">
       <p class="eyebrow">Portfolio</p>
       <h2 class="h2">Recent work</h2>
+      <SectionRule />
 
       <div class="gallery">
         {gallery.map((t, i) => {

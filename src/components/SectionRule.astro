@@ -1,0 +1,18 @@
+---
+/**
+ * The same mirrored-boteh rule the hero uses under the business name (see
+ * Hero.astro), reused under every section heading rather than invented once
+ * for the hero and left there — a motif that appears exactly once reads as
+ * decoration on the way in, not as part of the site's own visual grammar.
+ * Repeating it at every section threshold is what makes it read as the
+ * page's grammar instead.
+ */
+import Boteh from './Boteh.astro';
+---
+
+<div class="rule" aria-hidden="true">
+  <i></i>
+  <Boteh class="rule__mark" size={15} flip />
+  <Boteh class="rule__mark" size={15} />
+  <i></i>
+</div>

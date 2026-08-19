@@ -2,6 +2,7 @@
 import type { ClientSite } from '../lib/schema';
 import { intlPhone } from '../lib/format';
 import Icon from './Icon.astro';
+import SectionRule from './SectionRule.astro';
 
 interface Props {
   client: ClientSite;
@@ -19,6 +20,7 @@ const askDate = booking?.askDate ?? true;
     <section class="section reveal" id="book">
       <p class="eyebrow">Appointment · <span class="urdu">اپوائنٹمنٹ</span></p>
       <h2 class="h2">{heading}</h2>
+      <SectionRule />
       <p class="sub">Fill this in and WhatsApp opens with your details already written.</p>
 
       <div class="form">

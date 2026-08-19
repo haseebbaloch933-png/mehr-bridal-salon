@@ -1,0 +1,53 @@
+---
+/**
+ * Logo — the mark, not the wordmark.
+ *
+ * "Meher" is already set in Fraunces beside this, so the mark's only job is
+ * to be recognisable at a glance before the name is even read: a mihrab
+ * niche (the arch shape a bride is photographed against, already reused for
+ * the hero crop and the gallery tiles) with a single boteh planted inside
+ * it, the way a niche in a real haveli holds one ornament rather than a
+ * pattern. Open at the base, not a closed medallion — a stamped closed
+ * shape reads as a corporate badge; this reads as a doorway.
+ *
+ * Line weight matches Boteh (1.5 primary / 1 echo) so the two motifs read as
+ * one family wherever they appear together, and colour is currentColor so
+ * every skin's own ink/gold token drives it without a per-skin override.
+ */
+interface Props {
+  size?: number;
+  class?: string;
+}
+const { size = 56, class: cls = '' } = Astro.props;
+---
+
+<svg
+  class={cls}
+  width={size}
+  height={size}
+  viewBox="0 0 64 64"
+  fill="none"
+  aria-hidden="true"
+  focusable="false"
+>
+  <path
+    d="M8,58 L8,29.4 C8,17.44 20.48,9.12 32,6 C43.52,9.12 56,17.44 56,29.4 L56,58"
+    stroke="currentColor"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  ></path>
+  <g transform="translate(21.5, 34) scale(0.46)">
+    <path
+      d="M22 40.5C12 35.5 7.5 26.5 9.5 18.2 11.6 9.4 18.8 3.8 26 3.8c7 0 11.2 5.6 10.4 12.6-.7 6.6-6.2 10.8-11.4 9.4-3.8-1-4.6-5.2-2.4-7.4"
+      stroke="currentColor"
+      stroke-width="2.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    ></path>
+    <circle cx="22" cy="30.5" r="1.4" fill="currentColor" opacity="0.85"></circle>
+    <circle cx="19.4" cy="25.6" r="1.15" fill="currentColor" opacity="0.6"></circle>
+    <circle cx="18" cy="20.4" r="0.95" fill="currentColor" opacity="0.4"></circle>
+  </g>
+  <path d="M3,58 L61,58" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.35"></path>
+</svg>

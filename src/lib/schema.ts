@@ -16,14 +16,19 @@
 
 /**
  * `salon` is the light warm-atelier look, matched to how premium beauty
- * actually presents in 2026. `salon-noir` is the dark plum-and-gold
- * alternative — kept because it suits a jewellery-adjacent or menswear
- * grooming brand, and because having two to show closes sales faster.
+ * actually presents in 2026. `salon-organic` restates the same page in an
+ * imported Claude Design system. `salon-noir` is dark plum-and-gold, for a
+ * jewellery-adjacent or menswear grooming brand. `salon-crimson` is deep
+ * wine-and-gold — the explicitly "Pakistani bridal" direction, where red is
+ * measured as fill-only (never text, every red failed 4.5:1 as ink on that
+ * ground) and gold carries every heading and price. Kept alongside the
+ * others rather than replacing them, same reasoning as noir: options close.
  */
 export type Skin =
   | 'salon'
   | 'salon-organic'
   | 'salon-noir'
+  | 'salon-crimson'
   | 'dental'
   | 'gym'
   | 'bakery'
@@ -198,6 +203,7 @@ const SKINS: Skin[] = [
   'salon',
   'salon-organic',
   'salon-noir',
+  'salon-crimson',
   'dental',
   'gym',
   'bakery',

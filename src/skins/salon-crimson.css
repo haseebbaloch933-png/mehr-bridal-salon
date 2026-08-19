@@ -1,0 +1,886 @@
+/*
+ * SALON-CRIMSON SKIN
+ *
+ * "Fancy, red and gold, unmistakably a Pakistani bridal salon" — built as its
+ * own direction, not a recolour of salon-organic. Deep wine ground rather
+ * than cream: the chrome becomes the fabric the product photography is
+ * already wearing (barat-01.jpg, hero-01.jpg are both deep maroon-and-gold
+ * lehengas), so the site and the photos finally agree with each other.
+ *
+ * Two colours, two jobs — decided by measuring, not by eye:
+ *   GOLD is ink. It carries headings, prices, labels — every place text
+ *   needs to read as this brand's colour.
+ *   RED is fill only, never ink. Every candidate red measured under 4.5:1
+ *   as small text on this ground (best case 3.63:1) — it only works as a
+ *   solid surface with light text on top (measured 6.3–10.2:1 clear). So
+ *   red is reserved for the primary action and the featured card; it is
+ *   never a text colour anywhere in this file.
+ * That split is why the primary CTA is red and the prices are gold, not
+ * the reverse — it isn't taste, it's the only arrangement that reads.
+ *
+ * Structure mirrors salon-organic.css exactly (same components, same
+ * section order) so this skin inherits its recent work rather than
+ * reverting behind it: the mehrab hero treatment, the press-feedback fix
+ * on .card__cta/.menu__row/.maplink, and the staggered package-card
+ * entrance are all present here too, re-themed rather than rebuilt.
+ *
+ * Fonts: Fraunces + DM Sans, reused from salon/salon-noir rather than a
+ * fourth face pair — already fetched, zero additional weight, and
+ * Fraunces's own optical-sizing axis is the exact mechanism Apple's
+ * typography guidance asks for (shape changes with size), so reusing it
+ * here is a deliberate fit, not a shortcut.
+ */
+
+:root {
+  /* — ground: deep wine, ascending in that order (measured) — */
+  --bg: #24090e;
+  --surface: #341019;
+  --card-featured: #3d1219;
+  --surface-2: #3d141d;
+  --bar-bg: rgba(36, 9, 14, 0.82);
+
+  /* — ink — */
+  --fg: #f7eee3;
+  /* Dusty rose-taupe rather than a paler grey-taupe: warmer, fits the
+   * palette, and still clears 4.5:1 on every ground in this file (5.16
+   * on the lightest, surface-2 — measured, not eyeballed). */
+  --fg-dim: #ad8b82;
+  --fg-faint: #7a5c55;
+
+  /* — gold: the ink accent. g-dk is decorative-only — it measures 3.4–3.8:1
+   * on these grounds, under the 4.5 text minimum, so it never carries text;
+   * it exists for hairlines, bullet dots, the arch tint. --gold and --gold-lt
+   * both clear text contrast everywhere in this file (7.7–12.8:1). */
+  --gold: #d4a857;
+  --gold-lt: #ebd3a0;
+  --gold-dk: #8c6a28;
+  --gold-fill: linear-gradient(160deg, #ebd3a0, #d4a857);
+
+  /* — token-contract aliases —
+   * base.css is shared across every skin and reads --accent* for the
+   * generic .eyebrow/.price/:focus-visible rules (this skin overrides
+   * .card__amt, .menu__price and .btn--primary directly with the gold/red
+   * variables above, but those base.css rules still resolve --accent* on
+   * elements this file doesn't re-style). Every other skin defines this
+   * family; this file was missing it, which silently broke .eyebrow's
+   * colour (fell back to inherited --fg) and the focus-visible ring. Gold
+   * is ink per this file's rule, so --accent aliases to gold, not red. */
+  --accent: var(--gold);
+  --accent-lt: var(--gold-lt);
+  --accent-dk: var(--gold-dk);
+  --accent-fill: var(--gold-fill);
+  --on-accent: #2a1c05;
+  --shadow-accent: var(--shadow-gold);
+
+  /* — red: fill-only, see file header. Two stops, both independently
+   * measured safe with ivory or light-gold text on top (6.3 / 10.2 and
+   * 5.0 / 8.0 respectively) — a third, brighter stop existed in the
+   * palette draft and was cut because it landed at exactly 4.5:1 with
+   * zero rounding margin. Gradients in this file interpolate only between
+   * the two kept stops. */
+  --red: #a32638;
+  --red-dk: #6e1620;
+  --red-fill: linear-gradient(160deg, #a32638, #6e1620);
+  --on-red: #f7eee3;
+
+  --hairline: rgba(212, 168, 87, 0.24);
+  --rule: rgba(212, 168, 87, 0.13);
+
+  /* whatsapp — reserved, appears nowhere else. Dark ink on this specific
+   * green: measured 1.73:1 with this skin's own ivory, so --on-wa must
+   * stay the dark value every other skin already uses, not --fg. */
+  --wa: #25d366;
+  --on-wa: #04240f;
+
+  /* — type — */
+  --font-display: "Fraunces", "Hoefler Text", Baskerville, Georgia, serif;
+  --font-body: "DM Sans", -apple-system, "Segoe UI", Roboto, system-ui, sans-serif;
+  --font-ui: "DM Sans", -apple-system, "Segoe UI", system-ui, sans-serif;
+  --font-urdu: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", serif;
+
+  --fw-display: 500;
+  /* Apple's size-specific tracking, applied rather than asserted: large
+   * display text goes negative (letters read too open as they grow),
+   * small uppercase labels go positive (legibility at 10-11px). One fixed
+   * value for both would be wrong for one of them — see .h2/.hero__name
+   * (-0.02 to -0.03em) against .eyebrow/.tag (0.2em+) below. */
+  --ls-display: -0.02em;
+  --fs-body: 15.5px;
+  --fs-h2: 31px;
+
+  /* — metrics — */
+  --col: 470px;
+  --gutter: 22px;
+  --gap-section: 46px;
+  --radius: 20px;
+  --radius-pill: 999px;
+
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.25), 0 10px 28px -14px rgba(0, 0, 0, 0.55);
+  --shadow-lift: 0 3px 10px rgba(0, 0, 0, 0.3), 0 18px 40px -18px rgba(0, 0, 0, 0.65);
+  --shadow-gold: 0 2px 8px -2px rgba(212, 168, 87, 0.35), 0 12px 26px -14px rgba(212, 168, 87, 0.4);
+  --shadow-red: 0 4px 14px -4px rgba(163, 38, 56, 0.55), 0 16px 34px -16px rgba(110, 22, 32, 0.6);
+  --shadow-wa: 0 3px 12px -2px rgba(11, 122, 55, 0.5);
+
+  --t: 200ms;
+  --ease: cubic-bezier(0.2, 0.6, 0.3, 1);
+}
+
+/* Fraunces at display sizes: tight leading, negative tracking, the optical
+ * weight the file header explains. */
+.h2,
+.hero__name,
+.card h3,
+.card__amt,
+.menu__price,
+.review__quote {
+  font-family: var(--font-display);
+  font-weight: var(--fw-display);
+  line-height: 1.14;
+  letter-spacing: var(--ls-display);
+}
+
+/* ---- section flow ---- */
+
+#prices,
+#book {
+  background: var(--surface-2);
+}
+
+#reviews {
+  background: linear-gradient(180deg, var(--bg) 0%, var(--card-featured) 45%, var(--bg) 100%);
+}
+
+/* ---- hero ---- */
+
+.hero {
+  padding: 40px var(--gutter) 36px;
+  text-align: center;
+  background:
+    radial-gradient(120% 60% at 50% 0%, rgba(163, 38, 56, 0.16), transparent 65%),
+    var(--bg);
+}
+
+.hero__crest {
+  margin: 0 auto 16px;
+  width: 40px;
+  height: 40px;
+  color: var(--gold);
+}
+
+.hero--image {
+  padding: 0 0 36px;
+  background: var(--bg);
+}
+
+.hero__media {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  margin: 16px var(--gutter) 0;
+  clip-path: url(#mehrab);
+  background: var(--surface);
+}
+
+.hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero__media::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -1px 0;
+  height: 42%;
+  background: linear-gradient(180deg, rgba(36, 9, 14, 0) 0%, rgba(36, 9, 14, 0.7) 60%, #24090e 100%);
+}
+
+/* Gold moulding around the arch, not red — red this close to the photograph
+ * would fight the maroon lehenga inside it. Gold reads as a frame. */
+.hero__media::before {
+  content: "";
+  position: absolute;
+  inset: -9px -9px 0 -9px;
+  clip-path: url(#mehrab);
+  background: var(--gold-fill);
+  opacity: 0.28;
+  z-index: -1;
+}
+
+.hero--image .hero__body {
+  position: relative;
+  z-index: 1;
+  margin: -96px var(--gutter) 0;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 30px 22px 26px;
+  box-shadow: var(--shadow-soft);
+}
+
+.hero__name {
+  font-size: 46px;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  background: var(--gold-fill);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero--image .hero__name {
+  font-size: 40px;
+}
+
+.hero__kicker {
+  margin-top: 12px;
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold-lt);
+  font-weight: 600;
+}
+
+.rule {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin: 18px auto 0;
+  max-width: 190px;
+}
+
+.rule i {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--hairline) 45%, var(--hairline) 55%, transparent);
+}
+
+.rule__mark {
+  color: var(--gold);
+  flex: none;
+}
+
+.hero__tagline {
+  margin-top: 18px;
+  font-size: 20px;
+  line-height: 1.4;
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--fg);
+}
+
+.hero__urdu {
+  margin-top: 6px;
+  font-size: 15px;
+  color: var(--fg-dim);
+}
+
+.hero__place {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--fg-dim);
+}
+
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  font-size: 13px;
+  color: var(--fg-dim);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  padding: 7px 15px;
+}
+
+.rating__stars {
+  color: var(--gold);
+  letter-spacing: 0.1em;
+}
+
+.rating b {
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.hero__cta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+/* ---- buttons ---- */
+
+.btn {
+  border-radius: var(--radius-pill);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 14.5px;
+  letter-spacing: 0;
+  padding: 14px 16px;
+  transition: transform var(--t) var(--ease), background var(--t) var(--ease),
+    box-shadow var(--t) var(--ease);
+}
+
+/* Red is the one and only "take action" colour in this file — the primary
+ * button, and nothing else, gets the solid red-gold-adjacent treatment. */
+.btn--primary {
+  background: var(--red-fill);
+  color: var(--on-red);
+  box-shadow: var(--shadow-red);
+}
+
+.btn--primary:hover {
+  box-shadow: 0 4px 16px -4px rgba(163, 38, 56, 0.7), 0 20px 40px -18px rgba(110, 22, 32, 0.7);
+}
+
+.btn--ghost {
+  background: transparent;
+  border: 1px solid var(--hairline);
+  color: var(--fg);
+}
+
+.btn--ghost:hover {
+  background: rgba(212, 168, 87, 0.08);
+  border-color: var(--gold);
+}
+
+/* ---- trust chips ---- */
+
+.trust {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.trust span {
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: var(--gold-lt);
+  background: rgba(212, 168, 87, 0.12);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  padding: 4px 12px;
+  font-weight: 600;
+}
+
+/* ---- packages ---- */
+
+.cards {
+  display: grid;
+  gap: 14px;
+  margin-top: 26px;
+}
+
+.card {
+  border: 1px solid var(--hairline);
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 24px 22px 20px;
+  position: relative;
+  box-shadow: var(--shadow-soft);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lift);
+  border-color: rgba(212, 168, 87, 0.4);
+}
+
+/* The featured card is where both colours meet on purpose: gold border,
+ * red-warmed background, gold ribbon — the one place in the page allowed
+ * to be this rich, per "spend the boldness in one place." */
+.card--featured {
+  background: linear-gradient(165deg, var(--card-featured), var(--surface) 70%);
+  border-color: var(--gold);
+  box-shadow: var(--shadow-gold);
+}
+
+/* Package-card entrance stagger — identical mechanism and timing to
+ * salon-organic.css; reused here rather than re-derived, since the values
+ * (10px/300ms, quieter than .reveal's 14px/380ms; 60/120ms stagger) were
+ * already measured against AUDIT.md's stagger band and verified against a
+ * real IntersectionObserver trigger in that skin. No reason for this skin
+ * to re-litigate a decision the motion audit already settled. */
+.cards .card {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 300ms cubic-bezier(0.2, 0.6, 0.3, 1),
+    transform 300ms cubic-bezier(0.2, 0.6, 0.3, 1), box-shadow var(--t) var(--ease),
+    border-color var(--t) var(--ease);
+}
+
+.section.reveal.is-in .cards .card {
+  opacity: 1;
+  transform: none;
+}
+
+.cards .card:nth-child(2) {
+  transition-delay: 60ms;
+}
+
+.cards .card:nth-child(3) {
+  transition-delay: 120ms;
+}
+
+.card__ribbon {
+  position: absolute;
+  top: 0;
+  left: 22px;
+  transform: translateY(-50%);
+  background: var(--gold-fill);
+  color: #2a1c05;
+  font-family: var(--font-body);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+}
+
+.card h3 {
+  font-size: 25px;
+  color: var(--fg);
+}
+
+.card__urdu {
+  font-size: 14px;
+  color: var(--fg-dim);
+  margin-top: 2px;
+}
+
+.card__price {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 14px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.card__cur {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--fg-dim);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.card__amt {
+  font-size: 38px;
+  color: var(--gold-lt);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.025em;
+}
+
+.card__unit {
+  font-size: 13px;
+  color: var(--fg-dim);
+}
+
+.card ul {
+  list-style: none;
+  margin-top: 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.card li {
+  font-size: 14px;
+  color: var(--fg-dim);
+  display: flex;
+  gap: 10px;
+  line-height: 1.5;
+}
+
+.card li i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex: none;
+  margin-top: 8px;
+  font-size: 0;
+}
+
+.card__cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  padding: 13px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--fg);
+  transition: background var(--t) var(--ease), border-color var(--t) var(--ease),
+    transform 160ms var(--ease);
+}
+
+.card__cta:hover {
+  background: rgba(212, 168, 87, 0.1);
+  border-color: var(--gold);
+}
+
+/* Only the featured card's CTA gets the solid red fill — the flagship
+ * package is the one place a second "primary" action is justified. */
+.card--featured .card__cta {
+  background: var(--red-fill);
+  color: var(--on-red);
+  border-color: transparent;
+  box-shadow: var(--shadow-red);
+}
+
+/* ---- price menu ---- */
+
+.menu {
+  margin-top: 26px;
+}
+
+.menu__group + .menu__group {
+  margin-top: 28px;
+}
+
+.menu__heading {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 700;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.menu__row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rule);
+  transition: color var(--t) var(--ease), transform 160ms var(--ease);
+}
+
+.menu__row:last-child {
+  border-bottom: none;
+}
+
+.menu__name {
+  font-size: 15px;
+  flex: 1;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.menu__name small {
+  display: block;
+  color: var(--fg-dim);
+  font-size: 12px;
+  margin-top: 2px;
+  font-weight: 400;
+}
+
+.menu__dots {
+  flex: 1;
+  min-width: 14px;
+  border-bottom: 1px dotted var(--hairline);
+  transform: translateY(-4px);
+}
+
+.menu__price {
+  font-size: 20px;
+  color: var(--gold-lt);
+  font-variant-numeric: tabular-nums;
+  flex: none;
+}
+
+/* ---- booking form ---- */
+
+.form {
+  display: grid;
+  gap: 14px;
+  margin-top: 26px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow-soft);
+}
+
+.field label {
+  display: block;
+  font-size: 12px;
+  margin-bottom: 6px;
+  color: var(--fg-dim);
+  font-weight: 600;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  min-height: 44px;
+  background: var(--bg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  color: var(--fg);
+  padding: 10px 14px;
+  /* 16px minimum or iOS Safari zooms the viewport on focus. */
+  font-size: 16px;
+  transition: border-color var(--t) var(--ease);
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: var(--gold);
+}
+
+.field input::placeholder {
+  color: var(--fg-faint);
+}
+
+.form__note {
+  font-size: 12px;
+  color: var(--fg-dim);
+  text-align: center;
+}
+
+/* ---- gallery ---- */
+
+.gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 26px;
+  align-items: start;
+  padding-bottom: 16px;
+}
+
+.tile {
+  aspect-ratio: 3 / 4;
+  clip-path: url(#mehrab-soft);
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 12px;
+  background: var(--surface);
+}
+
+.gallery .tile:nth-child(even) {
+  transform: translateY(16px);
+}
+
+.tile img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tile figcaption {
+  position: relative;
+  z-index: 1;
+}
+
+.tile span {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  font-weight: 700;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+}
+
+.tile::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 45%;
+  background: linear-gradient(180deg, transparent, rgba(20, 5, 8, 0.72));
+}
+
+/*
+ * Placeholder tones for a slot with no photo yet (Engagement, right now —
+ * no AI-generation credit available this session; swap engagement-01.jpg
+ * for a real generation the moment there is, no other change needed).
+ * Wine-and-gold, not the organic skin's terracotta/olive palette, so an
+ * unfilled tile still belongs to this page rather than looking orphaned.
+ */
+.tile--ph::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.tile--ph:nth-child(4n + 1)::before { background: linear-gradient(150deg, #6e1620, #3d1219); }
+.tile--ph:nth-child(4n + 2)::before { background: linear-gradient(150deg, #8c6a28, #4a3413); }
+.tile--ph:nth-child(4n + 3)::before { background: linear-gradient(150deg, #a32638, #4a1019); }
+.tile--ph:nth-child(4n)::before      { background: linear-gradient(150deg, #d4a857, #6e5322); }
+
+/* ---- reviews ---- */
+
+.reviews {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.review {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 22px 20px 18px;
+  box-shadow: var(--shadow-soft);
+}
+
+.review:first-child {
+  background: linear-gradient(165deg, var(--card-featured), var(--surface) 75%);
+  border-color: var(--gold);
+}
+
+.review__quote {
+  font-size: 19px;
+  line-height: 1.4;
+  color: var(--fg);
+  letter-spacing: -0.01em;
+}
+
+.review__by {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+}
+
+.review__mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  flex: none;
+  display: grid;
+  place-items: center;
+  background: var(--gold-fill);
+  color: #2a1c05;
+  font-family: var(--font-display);
+  font-size: 15px;
+  line-height: 1;
+}
+
+.review__who b {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--fg);
+}
+
+.review__who small {
+  display: block;
+  font-size: 12px;
+  color: var(--fg-dim);
+  margin-top: 1px;
+}
+
+/* ---- find us ---- */
+
+.info {
+  margin-top: 24px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 6px 20px;
+  box-shadow: var(--shadow-soft);
+}
+
+.info__row {
+  display: flex;
+  gap: 16px;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.info__row:last-child {
+  border-bottom: none;
+}
+
+.info__k {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  width: 62px;
+  flex: none;
+  padding-top: 4px;
+  font-weight: 700;
+}
+
+.info__v {
+  font-size: 15px;
+  color: var(--fg);
+}
+
+.info__v small {
+  display: block;
+  color: var(--fg-dim);
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+.maplink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-top: 16px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  padding: 14px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--fg);
+  background: var(--surface);
+  transition: transform 160ms var(--ease), border-color var(--t) var(--ease);
+}
+
+.maplink:hover {
+  border-color: var(--gold);
+}
+
+/*
+ * Press feedback — identical values to salon-organic.css's plan-001 fix
+ * (scale(0.98), 160ms, this file's own --ease), not re-derived: AUDIT.md's
+ * worked value is a property of the interaction (a tap), not of the skin,
+ * so there's no reason a second skin should pick a different number.
+ */
+.card__cta:active,
+.menu__row:active,
+.maplink:active {
+  transform: scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card__cta:active,
+  .menu__row:active,
+  .maplink:active {
+    transition: none;
+  }
+}
+
+/* ---- footer ---- */
+
+.foot {
+  padding: 32px var(--gutter) 36px;
+  text-align: center;
+  color: var(--fg-faint);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}

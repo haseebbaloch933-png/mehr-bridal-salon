@@ -141,10 +141,29 @@ for (const { family, file } of faces) {
 
 const unusedFonts = [...fontFiles.keys()].filter((f) => !counted.has(f));
 
+/*
+ * Images this build's HTML actually references.
+ *
+ * src/lib/images.ts globs every client's images/ folder in one eager import
+ * map (a literal glob pattern is required; it cannot be built from the CLIENT
+ * env var), so dist/_astro can contain another client's demo photos even
+ * though no page links to them — Astro doesn't tree-shake individual entries
+ * out of an eagerly-imported glob object. Counting everything found on disk
+ * previously overstated (or, once, wrongly failed) the budget for photos no
+ * visitor would ever download. Same fix already applied to fonts above:
+ * trust what the markup links to, not what the build happened to emit.
+ */
+const referencedSource = (source) => htmlSource.includes(`/_astro/${source}.`);
+
 /* Best format per image = the one a modern browser would take. */
 let imageBytes = 0;
 const imageRows = [];
+const unusedImages = [];
 for (const [source, byExt] of imageGroups) {
+  if (!referencedSource(source)) {
+    unusedImages.push(source);
+    continue;
+  }
   const best = [...byExt.entries()].sort(
     (a, b) => (FORMAT_RANK[a[0]] ?? 9) - (FORMAT_RANK[b[0]] ?? 9)
   )[0];
@@ -174,6 +193,11 @@ console.log(
 );
 for (const [name, ext, size] of imageRows.sort((a, b) => b[2] - a[2]).slice(0, 6)) {
   console.log(`    ${(name + ext).padEnd(28)} ${String(kb(size)).padStart(6)} KB`);
+}
+if (unusedImages.length) {
+  console.log(
+    `    ${`(${unusedImages.length} other clients' photos on disk, not linked: ${unusedImages.join(', ')})`.padEnd(28)}`
+  );
 }
 console.log('  ─────────────────────────────────────────────');
 console.log(`  ${'TOTAL'.padEnd(14)} ${String(kb(total)).padStart(8)} KB   (limit ${LIMIT_KB})`);

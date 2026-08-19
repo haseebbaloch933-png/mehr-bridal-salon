@@ -5,7 +5,7 @@
   "business": {
     "name": "Meher",
     "tagline": "Bridal & Beauty Studio",
-    "skin": "salon-organic",
+    "skin": "salon-crimson",
     "established": 2016,
     "nameUrdu": "مہر",
     "heroImage": "hero-01.jpg",
@@ -127,7 +127,7 @@
     { "label": "Barat", "image": "barat-01.jpg", "alt": "Barat bridal makeup and hair" },
     { "label": "Mehndi", "image": "mehndi-01.jpg", "alt": "Mehndi day styling" },
     { "label": "Walima", "image": "walima-01.jpg", "alt": "Walima bridal look" },
-    { "label": "Engagement", "image": "engagement-01.jpg", "alt": "Engagement makeup" }
+    { "label": "Engagement", "image": "engagement-01.jpg", "alt": "Engagement day bridal look" }
   ],
 
   "reviews": [

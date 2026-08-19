@@ -1,5 +1,6 @@
 ---
 import type { ClientSite } from '../lib/schema';
+import SectionRule from './SectionRule.astro';
 
 interface Props {
   client: ClientSite;
@@ -27,6 +28,7 @@ const initial = (name: string) => name.trim().charAt(0).toUpperCase();
     <section class="section reveal" id="reviews">
       <p class="eyebrow">In their words</p>
       <h2 class="h2">Brides who trusted us</h2>
+      <SectionRule />
       {rating && (
         <p class="sub">
           {rating.score} out of 5, from {rating.count} reviews on Google

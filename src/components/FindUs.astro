@@ -2,6 +2,7 @@
 import type { ClientSite } from '../lib/schema';
 import { displayPhone, telHref, mapsHref } from '../lib/format';
 import Icon from './Icon.astro';
+import SectionRule from './SectionRule.astro';
 
 interface Props {
   client: ClientSite;
@@ -16,6 +17,7 @@ const callNumber = contact.phone ?? contact.whatsapp;
 <section class="section reveal" id="find">
   <p class="eyebrow">Visit · <span class="urdu">پتہ</span></p>
   <h2 class="h2">Find us</h2>
+  <SectionRule />
 
   <div class="info">
     <div class="info__row">

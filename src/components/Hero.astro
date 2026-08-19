@@ -6,6 +6,7 @@ import { waLink, enquiryMessage } from '../lib/whatsapp';
 import { clientImage } from '../lib/images';
 import Icon from './Icon.astro';
 import Boteh from './Boteh.astro';
+import Logo from './Logo.astro';
 
 interface Props {
   client: ClientSite;
@@ -44,7 +45,7 @@ const stars = '★'.repeat(Math.round(rating?.score ?? 0));
   }
 
   <div class="hero__body">
-    {!hero && <Boteh class="hero__crest" size={44} />}
+    <Logo class="hero__crest" size={44} />
 
     <h1 class="hero__name">{business.name}</h1>
     <p class="hero__kicker">{business.tagline}</p>

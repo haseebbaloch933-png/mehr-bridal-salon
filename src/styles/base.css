@@ -225,9 +225,24 @@ textarea {
   inset: auto 0 0 0;
   z-index: 40;
   background: var(--bar-bg);
-  border-top: 1px solid var(--hairline);
+  /* Apple's floating-toolbar recipe, not a guess: stronger blur + saturation
+   * boost so content sliding underneath stays legible-but-abstracted, and a
+   * translucent WHITE top edge (not the skin's --hairline) standing in for
+   * light catching a physical material — this is decorative, not text, so
+   * it's a genuine white sheen on every skin rather than a per-skin token;
+   * real glass looks the same regardless of what room it's floating over. */
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
   padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(20px) saturate(180%);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  /* Frostier, not just blurred less: raise the fill opacity toward solid so
+   * the bar still reads as chrome rather than becoming faint. */
+  .bar {
+    background: var(--bg);
+    backdrop-filter: none;
+  }
 }
 
 .bar__in {
@@ -280,6 +295,52 @@ textarea {
 .no-js .reveal {
   opacity: 1;
   transform: none;
+}
+
+/* ---- desktop staging -----------------------------------------------
+ * Above ~860px the centred column stops reading as "designed for mobile,
+ * simply not wide" and starts reading as an unfinished desktop page — the
+ * two gutters either side are the exact same flat --bg as the column
+ * itself, so there is nothing there for the eye to resolve as intentional.
+ * A laptop is not this product's primary device (booking happens on
+ * WhatsApp, one thumb, from Instagram), so the fix is not a responsive
+ * reflow — the content stays exactly the phone-shaped page it was designed
+ * as. It is staged in an atmosphere instead: two soft off-centre glows in
+ * the skin's own accent token, and the page lifted as a floating card so
+ * the boundary between "the product" and "the room it's sitting in" reads
+ * as deliberate rather than as empty space.
+ *
+ * Placed after .bar's own rule on purpose: same specificity, so cascade
+ * order decides, and this has to win only above the breakpoint.
+ */
+@media (min-width: 860px) {
+  body {
+    min-height: 100vh;
+    background:
+      radial-gradient(ellipse 900px 620px at 12% 8%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 65%),
+      radial-gradient(ellipse 760px 560px at 88% 92%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 65%),
+      var(--bg);
+  }
+
+  .page {
+    margin-block: 56px;
+    border-radius: calc(var(--radius) * 1.4);
+    overflow: hidden;
+    box-shadow: 0 60px 140px -40px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--hairline);
+  }
+
+  /* The bar is fixed to the viewport, not to .page — without this it stays
+     full-width under a now-narrower, now-elevated card, reading as a second,
+     disconnected panel rather than that card's footer. */
+  .bar {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: min(calc(var(--col) + 2 * var(--gutter)), calc(100% - 64px));
+    bottom: 24px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--hairline);
+  }
 }
 
 /* ---- utility ----------------------------------------------------- */
